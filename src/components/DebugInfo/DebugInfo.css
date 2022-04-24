@@ -1,0 +1,7 @@
+.main-block {
+  /* font-family: "JetBrains Mono", monospace; */
+  font-size: 0.9em;
+  line-height: 1.1em;
+  pointer-events: none;
+  user-select: none;
+}

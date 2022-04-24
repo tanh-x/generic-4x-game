@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=Saira+Condensed&display=swap");
+
+body,
+html {
+  @apply bg-slate-700;
+  color: white;
+  font-family: "Saira Condensed", Helvetica, sans-serif;
+  font-size: 16px;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+Canvas {
+  @apply w-screen h-screen;
+  background-image: linear-gradient(155deg, #1b1b44, #04000b);
+  pointer-events: auto;
+}
+
+.overlay-upper-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.overlay-upper-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
