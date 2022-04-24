@@ -26,8 +26,8 @@ const Paths: FunctionComponent<EdgesProps> = (props): JSX.Element => {
                 new Color(props.systems[edge[0]].star.color),
                 new Color(props.systems[edge[1]].star.color),
               ]}
-              color={"hsl(0, 0%, 70%)"}
-              linewidth={0.7}
+              color={"hsl(0, 0%, 90%)"}
+              linewidth={0.8}
               alphaWrite={undefined}
               matrixAutoUpdate={false}
             />

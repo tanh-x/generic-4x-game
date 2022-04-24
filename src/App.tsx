@@ -41,7 +41,6 @@ const App: FunctionComponent<any> = () => {
       <div className="overlay-upper-left">
         <DebugInfo info={info} />
       </div>
-      <div className="overlay-upper-right">test</div>
     </div>
   );
 };

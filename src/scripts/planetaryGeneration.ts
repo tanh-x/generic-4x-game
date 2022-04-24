@@ -107,7 +107,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 6,
     pWeight: 7,
     temperatureBias: [3, 3],
-    galacticDistanceBias: { threshold: 0.7, amount: 10}
+    galacticDistanceBias: { threshold: 0.7, amount: 10 },
   },
   ocean: {
     label: "Ocean World",
@@ -115,7 +115,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 5,
     pWeight: 16,
     temperatureBias: [2, 3],
-    galacticDistanceBias: { threshold: 0, amount: 0}
+    galacticDistanceBias: { threshold: 0, amount: 0 },
   },
   desert: {
     label: "Desert World",
@@ -123,7 +123,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 4,
     pWeight: 15,
     temperatureBias: [3, 4],
-    galacticDistanceBias: { threshold: 0.3, amount: -5 }
+    galacticDistanceBias: { threshold: 0.3, amount: -5 },
   },
   arsenic: {
     label: "Arsenic World",
@@ -131,7 +131,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 3,
     pWeight: 10,
     temperatureBias: [2, 3],
-    galacticDistanceBias: { threshold: 0.3, amount: -5 }
+    galacticDistanceBias: { threshold: 0.3, amount: -5 },
   },
   desolate: {
     label: "Desolate World",
@@ -139,7 +139,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 3,
     pWeight: 8,
     temperatureBias: [2, 2],
-    galacticDistanceBias: { threshold: 0, amount: 0 }
+    galacticDistanceBias: { threshold: 0, amount: 0 },
   },
 
   // GIANT PLANETS
@@ -149,7 +149,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 1,
     pWeight: 10,
     temperatureBias: [3, 5],
-    galacticDistanceBias: { threshold: 0, amount: 0 }
+    galacticDistanceBias: { threshold: 0, amount: 0 },
   },
   hydrogen: {
     label: "Hydrogen Giant",
@@ -157,7 +157,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 0,
     pWeight: 25,
     temperatureBias: [0, 1],
-    galacticDistanceBias: { threshold: 0.6, amount: -8 }
+    galacticDistanceBias: { threshold: 0.6, amount: -8 },
   },
   ammonia: {
     label: "Ammonia Giant",
@@ -165,7 +165,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 0,
     pWeight: 18,
     temperatureBias: [1, 2],
-    galacticDistanceBias: { threshold: 0.5, amount: -4 }
+    galacticDistanceBias: { threshold: 0.5, amount: -4 },
   },
   methane: {
     label: "Methane Giant",
@@ -173,7 +173,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 0,
     pWeight: 10,
     temperatureBias: [1, 3],
-    galacticDistanceBias: { threshold: 0, amount: 0 }
+    galacticDistanceBias: { threshold: 0, amount: 0 },
   },
   alkali: {
     label: "Alkali Giant",
@@ -181,7 +181,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 0,
     pWeight: 7,
     temperatureBias: [4, 5],
-    galacticDistanceBias: { threshold: 0.7, amount: 6 }
+    galacticDistanceBias: { threshold: 0.7, amount: 6 },
   },
   silicate: {
     label: "Silicate Giant",
@@ -189,21 +189,24 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 0,
     pWeight: 3,
     temperatureBias: [5, 9],
-    galacticDistanceBias: { threshold: 0.85, amount: 10 }
+    galacticDistanceBias: { threshold: 0.85, amount: 10 },
   },
 };
 
 export interface Planet {
-  type: PlanetType
+  type: PlanetType;
 }
 
-export const generatePlanetarySystem = (): Planet[] => {
+export const generatePlanetarySystem = (
+  starTemperature: number,
+  starMass: number,
+  distance: number
+): Planet[] => {
   const generated: Planet[] = [];
-  while (generated.length < 6 && Math.random() < (1 - generated.length * 0.1)) {
+  while (generated.length < 6 && Math.random() < 1 - generated.length * 0.1) {
     generated.push({
-      type: randChoose([...planetTypesList])
-    })
+      type: randChoose([...planetTypesList]),
+    });
   }
-  console.log(generated)
   return generated;
 };

@@ -217,7 +217,11 @@ for (let i = 0; i < params.starCount; i++) {
   SYSTEMS.push({
     index: i,
     name,
-    planets: generatePlanetarySystem(),
+    planets: generatePlanetarySystem(
+      0,
+      star.mass,
+      Math.sqrt(position[0] ** 2 + position[1] ** 2 + position[2] ** 2)
+    ),
     star,
     position,
   });
@@ -253,14 +257,7 @@ for (let i = 0; i < params.starCount; i++) {
       for (let k = 0; k < systemsEdgeList.length; k++) {
         const p1 = systemsEdgeList[k][0];
         const p2 = systemsEdgeList[k][1];
-        if (
-          intersectingEdges(
-            getXZ(i),
-            getXZ(j),
-            getXZ(p1),
-            getXZ(p2),
-          )
-        ) {
+        if (intersectingEdges(getXZ(i), getXZ(j), getXZ(p1), getXZ(p2))) {
           hasCollision = true;
           break;
         }

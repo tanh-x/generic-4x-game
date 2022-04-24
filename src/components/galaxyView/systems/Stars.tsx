@@ -64,7 +64,6 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
 
       {/* HTML labels */}
       <StarLabels
-        focusOnSystem={props.focusOnSystem}
         labelsRef={labelsRef}
         controlsRef={props.controlsRef}
       />
@@ -75,7 +74,7 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
         limit={_GAME.GALAXY.genParams.starCount}
         visible={false}
       >
-        <boxBufferGeometry args={[2.5, 2.5, 2.5]} />
+        <boxBufferGeometry args={[3, 3, 3]} />
         <meshBasicMaterial wireframe={true} />
         {_GAME.GALAXY.systems.map((system: StarSystem, index: number) => {
           return (

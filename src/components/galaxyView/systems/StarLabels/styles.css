@@ -19,4 +19,7 @@
   @apply h-6 z-10;
   border-top: 1px solid #888;
   transition: cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
+
+  display: flex;
+  justify-content: space-evenly;
 }

@@ -43,6 +43,10 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
     return {
       position: camera.position.toArray(),
       reset: true,
+      config: {
+        tension: 100,
+        precision: 0.05,
+      },
       onChange: () => {
         camera.position.set(
           ...(spring.position.animation.values.map((component) => {
@@ -65,22 +69,34 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
     };
   });
 
-  const onLMBDown = (): void => {
+  const raycastStars = (): number | undefined => {
     raycaster.setFromCamera(mouse, camera);
     const intxs: THREE.Intersection[] = raycaster.intersectObjects(
-      starsHitboxesRef.current.children
-      // scene.children
+      starsHitboxesRef.current.children, 
     );
-    if (intxs[0] !== undefined) {
-      const { systemIndex } = intxs[0].object.userData;
-      focusOnSystem(systemIndex);
-    } else {
-      focusedStarIndex.current = undefined;
+    for (let i = 0; i < intxs.length; i++) {
+      if (intxs[i].object.userData.systemIndex !== undefined) {
+        return intxs[i].object.userData.systemIndex;
+      }
     }
+  }
+
+  const onLClick = (): void => {
+    const selectedIndex = raycastStars();
+    if (selectedIndex === undefined) {
+      focusedStarIndex.current = undefined;
+      return
+    }
+    focusedStarIndex.current = selectedIndex;
+    focusOnSystem(selectedIndex);
+  };
+
+  const onLDoubleClick = (): void => {
+    
   };
 
   const focusOnSystem = (index: number): void => {
-    console.log(index);
+    console.log(_GAME.GALAXY.systems[index].name, index);
     focusedStarIndex.current = index;
     const focusedSystemPosition = _GAME.GALAXY.systems[index].position;
     spring.position.start({
@@ -91,7 +107,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
           .clone() // Dont mutate the camera vector
           .sub(controlsRef.current.target) // Get directional vector of camera
           .normalize()
-          .multiplyScalar(40) // Zoom in
+          .multiplyScalar(25) // Zoom in
           .toArray()
       ) as [x: number, y: number, z: number],
     });
@@ -103,9 +119,11 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
     camera.lookAt(0, 0, 0);
     controlsUpdateFn.current = controlsRef.current.update.bind({});
 
-    document.addEventListener("click", onLMBDown);
+    document.addEventListener("click", onLClick);
+    document.addEventListener("dblclick", onLDoubleClick);
     return (): void => {
-      document.removeEventListener("click", onLMBDown);
+      document.removeEventListener("click", onLClick);
+      document.removeEventListener("dblclick", onLDoubleClick);
     };
   }, []);
 
