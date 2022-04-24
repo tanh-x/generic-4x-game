@@ -189,7 +189,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 0,
     pWeight: 3,
     temperatureBias: [5, 9],
-    galacticDistanceBias: { threshold: 0.9, amount: 10 }
+    galacticDistanceBias: { threshold: 0.85, amount: 10 }
   },
 };
 
