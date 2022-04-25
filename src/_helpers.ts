@@ -128,14 +128,20 @@ export function intersectingEdges(
   p3: Coordinate2D,
   p4: Coordinate2D
 ): boolean {
-  if (hasDuplicates([p1.toString(), p2.toString(), p3.toString(), p4.toString()])) return false;
+  if (
+    hasDuplicates([p1.toString(), p2.toString(), p3.toString(), p4.toString()])
+  )
+    return false;
 
-  const d = (p2[0] - p1[0]) * (p4[1] - p3[1]) - (p2[1] - p1[1]) * (p4[0] - p3[0]);
-  const n1 = (p1[1] - p3[1]) * (p4[0] - p3[0]) - (p1[0] - p3[0]) * (p4[1] - p3[1]);
-  const n2 = (p1[1] - p3[1]) * (p2[0] - p1[0]) - (p1[0] - p3[0]) * (p2[1] - p1[1]);
+  const d =
+    (p2[0] - p1[0]) * (p4[1] - p3[1]) - (p2[1] - p1[1]) * (p4[0] - p3[0]);
+  const n1 =
+    (p1[1] - p3[1]) * (p4[0] - p3[0]) - (p1[0] - p3[0]) * (p4[1] - p3[1]);
+  const n2 =
+    (p1[1] - p3[1]) * (p2[0] - p1[0]) - (p1[0] - p3[0]) * (p2[1] - p1[1]);
   if (d === 0) {
     return n1 == 0 && n2 == 0;
-  };
+  }
 
   const r = n1 / d;
   const s = n2 / d;
@@ -143,16 +149,24 @@ export function intersectingEdges(
 }
 
 export function addArrays(arr1: number[], arr2: number[]): number[] {
-  if (arr1.length !== arr2.length) { throw "Array length mismatch" };
-  
-  return arr1.map((x, i) => (x + arr2[i]));
+  if (arr1.length !== arr2.length) {
+    throw "Array length mismatch";
+  }
+
+  return arr1.map((x, i) => x + arr2[i]);
 }
 
-export function inRange(num: number, range: [low: number, high: number], inclusive?: boolean): boolean {
+export function inRange(
+  num: number,
+  range: [low: number, high: number],
+  inclusive?: boolean
+): boolean {
   // return (num > range[0] && num < range[1]) && (!inclusive || num === range[0] || num === range[1]);
-  return (inclusive ?? true) ? (num >= range[0] && num <= range[1]) : (num > range[0] && num < range[1]);
+  return inclusive ?? true
+    ? num >= range[0] && num <= range[1]
+    : num > range[0] && num < range[1];
 }
 
 export function sumOfSquares(arr: number[]): number {
-  return arr.map(x => x * x).reduce((a, b) => (a + b));
+  return arr.map((x) => x * x).reduce((a, b) => a + b);
 }

@@ -96,7 +96,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
   };
 
   const focusOnSystem = (index: number): void => {
-    console.log(_GAME.GALAXY.systems[index].name, index);
+    console.log(_GAME.GALAXY.systems[index]);
     focusedStarIndex.current = index;
     const focusedSystemPosition = _GAME.GALAXY.systems[index].position;
     spring.position.start({

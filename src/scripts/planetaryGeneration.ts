@@ -74,8 +74,8 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     label: "Rocky Body",
     category: "barren",
     habitationLevel: 1,
-    pWeight: 50,
-    temperatureRange: [0, 5],
+    pWeight: 25,
+    temperatureRange: [0, 7],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
       MATS: 6,
@@ -88,8 +88,8 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     label: "Icy Body",
     category: "barren",
     habitationLevel: 2,
-    pWeight: 20,
-    temperatureRange: [0, 2],
+    pWeight: 15,
+    temperatureRange: [0, 4],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
       MATS: 4,
@@ -102,8 +102,8 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     label: "Metal Body",
     category: "barren",
     habitationLevel: 1,
-    pWeight: 30,
-    temperatureRange: [2, 5],
+    pWeight: 15,
+    temperatureRange: [1, 5],
     galacticDistanceBias: { threshold: 0.5, amount: 10 },
     baseStats: {
       MATS: 8,
@@ -118,8 +118,8 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     label: "Volcanic World",
     category: "terrestial",
     habitationLevel: 0,
-    pWeight: 30,
-    temperatureRange: [5, 7],
+    pWeight: 12,
+    temperatureRange: [4, 8],
     galacticDistanceBias: { threshold: 0.3, amount: -10 },
     baseStats: {
       MATS: 12,
@@ -132,7 +132,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     label: "Carbonic World",
     category: "terrestial",
     habitationLevel: 1,
-    pWeight: 20,
+    pWeight: 11,
     temperatureRange: [1, 5],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
@@ -149,7 +149,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     category: "habitable",
     habitationLevel: 6,
     pWeight: 7,
-    temperatureRange: [3, 3],
+    temperatureRange: [2, 4],
     galacticDistanceBias: { threshold: 0.7, amount: 10 },
     baseStats: {
       MATS: 6,
@@ -163,7 +163,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     category: "habitable",
     habitationLevel: 5,
     pWeight: 16,
-    temperatureRange: [2, 3],
+    temperatureRange: [1, 4],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
       MATS: 3,
@@ -177,7 +177,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     category: "habitable",
     habitationLevel: 4,
     pWeight: 15,
-    temperatureRange: [3, 4],
+    temperatureRange: [2, 5],
     galacticDistanceBias: { threshold: 0.3, amount: -5 },
     baseStats: {
       MATS: 8,
@@ -191,7 +191,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     category: "habitable",
     habitationLevel: 3,
     pWeight: 10,
-    temperatureRange: [2, 3],
+    temperatureRange: [2, 4],
     galacticDistanceBias: { threshold: 0.3, amount: -5 },
     baseStats: {
       MATS: 10,
@@ -205,7 +205,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     category: "habitable",
     habitationLevel: 3,
     pWeight: 8,
-    temperatureRange: [2, 2],
+    temperatureRange: [2, 4],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
       MATS: 6,
@@ -221,7 +221,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     category: "giant",
     habitationLevel: 1,
     pWeight: 10,
-    temperatureRange: [3, 5],
+    temperatureRange: [2, 6],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
       MATS: 15,
@@ -235,7 +235,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     category: "giant",
     habitationLevel: 0,
     pWeight: 25,
-    temperatureRange: [0, 1],
+    temperatureRange: [0, 4],
     galacticDistanceBias: { threshold: 0.6, amount: -8 },
     baseStats: {
       MATS: 10,
@@ -249,7 +249,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     category: "giant",
     habitationLevel: 0,
     pWeight: 18,
-    temperatureRange: [1, 2],
+    temperatureRange: [1, 4],
     galacticDistanceBias: { threshold: 0.5, amount: -4 },
     baseStats: {
       MATS: 15,
@@ -263,7 +263,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     category: "giant",
     habitationLevel: 0,
     pWeight: 10,
-    temperatureRange: [1, 3],
+    temperatureRange: [1, 5],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
       MATS: 8,
@@ -277,7 +277,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     category: "giant",
     habitationLevel: 0,
     pWeight: 7,
-    temperatureRange: [4, 5],
+    temperatureRange: [3, 6],
     galacticDistanceBias: { threshold: 0.7, amount: 6 },
     baseStats: {
       MATS: 12,
@@ -291,7 +291,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     category: "giant",
     habitationLevel: 0,
     pWeight: 3,
-    temperatureRange: [5, 8],
+    temperatureRange: [4, 8],
     galacticDistanceBias: { threshold: 0.85, amount: 8 },
     baseStats: {
       MATS: 48,
@@ -305,7 +305,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     category: "giant",
     habitationLevel: 0,
     pWeight: 1,
-    temperatureRange: [7, 8],
+    temperatureRange: [5, 8],
     galacticDistanceBias: { threshold: 0.85, amount: 10 },
     baseStats: {
       MATS: 5,
@@ -329,6 +329,9 @@ export interface Planet {
     SCIS: number;
     CRED: number;
   };
+  misc: {
+    temperature: number;
+  }
 }
 
 export const generatePlanetarySystem = (
@@ -337,9 +340,12 @@ export const generatePlanetarySystem = (
   galacticDistance: number
 ): Planet[] => {
   const generated: Planet[] = [];
-  for (let i = 0; i < 7 /* maximum amount of planets */; i++) {
-    if (Math.random() < 1.0 - i * 0.08) {
+  for (let i = 0; i < 12 ; i++) {
+    if (generated.length === 6 || Math.random() > 1.0 - i * 0.06) {
       break;
+    }
+    if (Math.random() > 0.7) {
+      continue;
     }
 
     const radiationFlux: number = Math.min(
@@ -355,15 +361,18 @@ export const generatePlanetarySystem = (
     const planetCategory: PlanetCategory = randChoose([
       ...planetCategoriesList,
     ]);
+
     const candidateTypes: PlanetType[] = (
       Object.keys(planetTypesData) as PlanetType[]
     ).filter(
       (key) =>
-        planetTypesData[key].category === planetCategory &&
-        inRange(temperature, planetTypesData[key].temperatureRange)
+        inRange(temperature, planetTypesData[key].temperatureRange) &&
+        planetTypesData[key].category === planetCategory
     );
+    if (candidateTypes.length === 0) { continue; }
+
     const weights: number[] = candidateTypes.map(
-      (p) =>
+      (p) => 
         planetTypesData[p].pWeight +
         (galacticDistance >= planetTypesData[p].galacticDistanceBias.threshold
           ? planetTypesData[p].galacticDistanceBias.amount
@@ -379,10 +388,15 @@ export const generatePlanetarySystem = (
       APRV: _data.habitationLevel - 3,
     };
 
+    const misc: Planet["misc"] = {
+      temperature: temperature,
+    }
+  
     // Append new planet onto array
     generated.push({
       type,
       stats,
+      misc
     });
   }
   return generated;
