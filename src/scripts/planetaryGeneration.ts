@@ -308,7 +308,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
       credits: -40,
     }
   }
-};
+} as const;
 
 export interface Planet {
   type: PlanetType;
@@ -320,7 +320,7 @@ export const generatePlanetarySystem = (
   galacticDistance: number,
 ): Planet[] => {
   const generated: Planet[] = [];
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 7 /* maximum amount of planets */; i++) {
     if (Math.random() < (1.0 - i * 0.08)) { break; }
     const radiationFlux: number = Math.min(Math.sqrt(starLuminosity) * 1.46 / (i + 1), 7);
     const temperature: number = clamp(radiationFlux + randNormal(0, 1.1, 3.0), 0, 8);
@@ -332,7 +332,9 @@ export const generatePlanetarySystem = (
         inRange(temperature, planetTypesData[key].temperatureRange)
       )
     );
-    const type = randChoose(candidateTypes);  
+    const type = randChoose(candidateTypes);
+    const _data: PlanetProps = planetTypesData[type];
+    const stats = {..._data.baseStats};
     
     // Append new planet onto array
     generated.push({

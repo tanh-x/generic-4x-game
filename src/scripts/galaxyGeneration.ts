@@ -112,7 +112,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     massRange: [0.05, 0.13],
     luminosity: 1,
   },
-};
+} as const;
 const pWeightList = Object.values(spectralClassesData).map(
   (_sc) => _sc.pWeight
 );
@@ -189,14 +189,14 @@ const getXZ = (index: number): [x: number, z: number] => {
 // Generating star systems
 for (let i = 0; i < params.starCount; i++) {
   const _sc: SpectralType = spectralTypesList[weightedChoice(pWeightList)];
-  const _scData: SpectralClassProps = spectralClassesData[_sc];
+  const _data: SpectralClassProps = spectralClassesData[_sc];
 
   const name = generateName();
   const star: StellarBody = {
     spectralClass: _sc,
     luminosityClass: "mainsequence",
-    color: randChoose(_scData.color),
-    mass: randUniform(..._scData.massRange),
+    color: randChoose(_data.color),
+    mass: randUniform(..._data.massRange),
   };
 
   let position: [x: number, y: number, z: number] = [0, 0, 0];
