@@ -35,6 +35,8 @@ export interface SpectralClassProps {
   color: string[];
   // More massive stars can host more bodies, roughly solar masses
   massRange: [min: number, max: number];
+  // Luminosity determines the temperature of planets as a function of distance
+  luminosity: number;
 }
 
 export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
@@ -44,6 +46,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     pWeight: 5,
     color: ["#C8C0FF", "#B4B1FF", "#B2B2FF", "#B3A6FF"],
     massRange: [12, 25],
+    luminosity: 200,
   },
   bluewhite: {
     label: "Blue-White",
@@ -51,6 +54,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     pWeight: 8,
     color: ["#A3C5FF", "#B2E1FF", "#B5DAFF", "#B4F1FF"],
     massRange: [5.5, 12],
+    luminosity: 120,
   },
   white: {
     label: "White",
@@ -58,6 +62,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     pWeight: 6,
     color: ["#DDDDFF", "#DDDDFF", "#F0F1FF", "#D2D5FF"],
     massRange: [2.8, 5.5],
+    luminosity: 70,
   },
   yellowwhite: {
     label: "Yellow-White",
@@ -65,6 +70,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     pWeight: 6,
     color: ["#F8F7FF", "#F9F5FF", "#FFF4EA", "#FFF5F5"],
     massRange: [1.5, 2.8],
+    luminosity: 45
   },
   yellow: {
     label: "Yellow",
@@ -72,6 +78,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     pWeight: 10,
     color: ["#FFF4EA", "#FFEDE3", "#fff5cf", "#ffedcf"],
     massRange: [0.8, 1.5],
+    luminosity: 30,
   },
   orange: {
     label: "Orange",
@@ -79,6 +86,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     pWeight: 20,
     color: ["#FFD2A1", "#FFC199", "#FFBB78", "#FFDAB5"],
     massRange: [0.3, 0.8],
+    luminosity: 20,
   },
   red: {
     label: "Red",
@@ -86,6 +94,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     pWeight: 25,
     color: ["#FFB56C", "#FFAC6F", "#FF932C", "#FFAD5E"],
     massRange: [0.08, 0.3],
+    luminosity: 12,
   },
   brown: {
     label: "Brown",
@@ -93,6 +102,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     pWeight: 8,
     color: ["#EF854C", "#EF7C6F", "#DF735C", "#EF7D3E"],
     massRange: [0.05, 0.13],
+    luminosity: 6,
   },
   subbrown: {
     label: "Sub-Brown",
@@ -100,6 +110,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     pWeight: 3,
     color: ["#BF654C", "#CF5C5F", "#C3636C", "#CF6D7E"],
     massRange: [0.05, 0.13],
+    luminosity: 1,
   },
 };
 const pWeightList = Object.values(spectralClassesData).map(
@@ -210,6 +221,8 @@ for (let i = 0; i < params.starCount; i++) {
     } else {
       break;
     }
+
+    const planets = generatePlanetarySystem();
   }
   // Add random y-coord variation
   position[1] = randNormal(0, 2.7, 4.5);
@@ -217,13 +230,9 @@ for (let i = 0; i < params.starCount; i++) {
   SYSTEMS.push({
     index: i,
     name,
-    planets: generatePlanetarySystem(
-      0,
-      star.mass,
-      Math.sqrt(position[0] ** 2 + position[1] ** 2 + position[2] ** 2)
-    ),
     star,
     position,
+    planets,
   });
 }
 
