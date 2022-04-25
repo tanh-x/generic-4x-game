@@ -18,7 +18,7 @@ import {
 } from "@react-three/drei";
 import { useSpring, animated } from "@react-spring/three";
 
-import { addArrays } from "_helpers";
+import { Array3, addArrays } from "_helpers";
 import { GamestateContext } from "_Main";
 
 import Stars from "./systems/Stars";
@@ -54,7 +54,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
           ...(spring.position.animation.values.map((component) => {
             // @ts-ignore
             return component._value;
-          }) as [number, number, number])
+          }) as Array3)
         );
       },
       onStart: () => {
@@ -67,7 +67,6 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         // Restore life functions to the controls
         controlsRef.current.update = controlsUpdateFn.current;
         controlsRef.current.enabled = true;
-        console.log(controlsRef.current.update);
       },
     };
   });
@@ -115,7 +114,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
           .normalize()
           .multiplyScalar(40) // Zoom in
           .toArray()
-      ) as [x: number, y: number, z: number],
+      ) as Array3,
     });
     controlsRef.current.target.set(...focusedSystemPosition);
   };
@@ -133,7 +132,6 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
       const focusedPosition = _GAME.GALAXY.systems[props.focusedIndexRef.current].position
       controlsRef.current.target.set(...focusedPosition);
       camera.lookAt(...focusedPosition);
-      console.log("here", controlsRef.current)
     }
 
     document.addEventListener("click", onLClick);
@@ -155,9 +153,9 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         minDistance={10}
         zoomSpeed={2}
         maxDistance={300}
-        // maxPolarAngle={45 * deg}
-        // minAzimuthAngle={-30 * deg}
-        // maxAzimuthAngle={30 * deg}
+        maxPolarAngle={50 * deg}
+        minAzimuthAngle={-30 * deg}
+        maxAzimuthAngle={30 * deg}
       />
 
       <Stars

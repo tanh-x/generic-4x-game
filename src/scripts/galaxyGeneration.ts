@@ -6,6 +6,7 @@ import {
   randChoose,
   intersectingEdges,
   sumOfSquares,
+  Array3,
 } from "_helpers";
 import generateName from "scripts/generateName";
 import { generatePlanetarySystem, Planet } from "./planetaryGeneration";
@@ -131,7 +132,7 @@ export interface StarSystem {
   name: string;
   star: StellarBody;
   planets: Planet[];
-  position: [x: number, y: number, z: number];
+  position: Array3;
 }
 
 export interface paramsProps {

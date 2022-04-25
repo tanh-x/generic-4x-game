@@ -1,3 +1,5 @@
+export type Array3 = [x: number, y: number, z: number];
+
 export function round(
   num: number,
   decimals: number = 0,

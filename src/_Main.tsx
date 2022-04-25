@@ -59,7 +59,7 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
         }
       </GamestateContext.Provider>
       {/* <axesHelper position={[0, 0.001, 0]} args={[5]} /> */}
-      <gridHelper args={[200, 20]}/>
+      {/* <gridHelper args={[200, 20]}/> */}
 
       {true && (
         <>
