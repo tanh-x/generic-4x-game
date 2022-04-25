@@ -122,6 +122,7 @@ export interface StellarBody {
   spectralClass: string;
   color: string;
   mass: number;
+  radius: number;
   luminosity: number;
 }
 
@@ -197,8 +198,10 @@ for (let i = 0; i < params.starCount; i++) {
     spectralClass: _sc,
     color: randChoose(_data.color),
     mass: randUniform(..._data.massRange),
+    radius: 1, // default, will be set soon
     luminosity: _data.luminosity * randNormal(1, 0.16, 0.3),
   };
+  star.radius = 0.4 + star.mass * 0.03
 
   let position: [x: number, y: number, z: number] = [0, 0, 0];
   // Generate XZ position, regenerate if manhattan distance < threshold

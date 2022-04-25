@@ -5,6 +5,7 @@ import {
   useContext,
   useRef,
   FunctionComponent,
+  MutableRefObject,
   Fragment,
 } from "react";
 import { useThree, useFrame } from "@react-three/fiber";
@@ -22,24 +23,25 @@ import { GamestateContext } from "_Main";
 
 import Stars from "./systems/Stars";
 import Paths from "./systems/Paths";
-import EnvFX from "./EnvFX";
 
 const defaultCameraDirection = new THREE.Vector3(0, 5, 1).normalize();
 const deg = Math.PI / 180;
 
-interface GalaxyProps {}
+interface GalaxyProps {
+  switchView: Function;
+  focusedIndexRef: MutableRefObject<number | undefined>;
+}
 
 const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
-  console.log("rerendering galaxy view");
+  console.log("RENDER galaxyView");
 
   const { gl, raycaster, scene, mouse, camera } = useThree();
   const _GAME = useContext(GamestateContext);
   const controlsRef = useRef<any>();
   const controlsUpdateFn = useRef((): void => {});
   const starsHitboxesRef = useRef<any>();
-  const focusedStarIndex = useRef<number | undefined>(undefined);
 
-  const [spring, api] = useSpring((number: number, index: number) => {
+  const [spring, api] = useSpring(() => {
     return {
       position: camera.position.toArray(),
       reset: true,
@@ -65,6 +67,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         // Restore life functions to the controls
         controlsRef.current.update = controlsUpdateFn.current;
         controlsRef.current.enabled = true;
+        console.log(controlsRef.current.update);
       },
     };
   });
@@ -72,32 +75,35 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
   const raycastStars = (): number | undefined => {
     raycaster.setFromCamera(mouse, camera);
     const intxs: THREE.Intersection[] = raycaster.intersectObjects(
-      starsHitboxesRef.current.children, 
+      starsHitboxesRef.current.children
     );
     for (let i = 0; i < intxs.length; i++) {
       if (intxs[i].object.userData.systemIndex !== undefined) {
         return intxs[i].object.userData.systemIndex;
       }
     }
-  }
+  };
 
   const onLClick = (): void => {
+    if (spring.position.isAnimating) return;
+    
     const selectedIndex = raycastStars();
     if (selectedIndex === undefined) {
-      focusedStarIndex.current = undefined;
-      return
+      props.focusedIndexRef.current = undefined;
+      return;
     }
-    focusedStarIndex.current = selectedIndex;
-    focusOnSystem(selectedIndex);
+
+    if (props.focusedIndexRef.current === selectedIndex) {
+      props.switchView("system");
+    } else {
+      focusOnSystem(selectedIndex);
+    }
   };
 
-  const onLDoubleClick = (): void => {
-    
-  };
+  const onLDoubleClick = (): void => {};
 
   const focusOnSystem = (index: number): void => {
-    console.log(_GAME.GALAXY.systems[index]);
-    focusedStarIndex.current = index;
+    props.focusedIndexRef.current = index;
     const focusedSystemPosition = _GAME.GALAXY.systems[index].position;
     spring.position.start({
       from: camera.position.toArray(),
@@ -107,7 +113,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
           .clone() // Dont mutate the camera vector
           .sub(controlsRef.current.target) // Get directional vector of camera
           .normalize()
-          .multiplyScalar(25) // Zoom in
+          .multiplyScalar(40) // Zoom in
           .toArray()
       ) as [x: number, y: number, z: number],
     });
@@ -115,13 +121,25 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
   };
 
   useEffect(() => {
-    camera.position.copy(defaultCameraDirection.clone().multiplyScalar(60));
-    camera.lookAt(0, 0, 0);
+    console.log("MOUNT galaxyView");
+
     controlsUpdateFn.current = controlsRef.current.update.bind({});
+    if (props.focusedIndexRef.current === undefined) {
+      // Should be on initial render
+      camera.position.copy(defaultCameraDirection.clone().multiplyScalar(60));
+      camera.lookAt(0, 0, 0);
+    } else {
+      // Should be on switching from another view
+      const focusedPosition = _GAME.GALAXY.systems[props.focusedIndexRef.current].position
+      controlsRef.current.target.set(...focusedPosition);
+      camera.lookAt(...focusedPosition);
+      console.log("here", controlsRef.current)
+    }
 
     document.addEventListener("click", onLClick);
     document.addEventListener("dblclick", onLDoubleClick);
     return (): void => {
+      console.log("UNMOUNT galaxyView");
       document.removeEventListener("click", onLClick);
       document.removeEventListener("dblclick", onLDoubleClick);
     };
@@ -137,11 +155,10 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         minDistance={10}
         zoomSpeed={2}
         maxDistance={300}
-        maxPolarAngle={45 * deg}
-        minAzimuthAngle={-30 * deg}
-        maxAzimuthAngle={30 * deg}
+        // maxPolarAngle={45 * deg}
+        // minAzimuthAngle={-30 * deg}
+        // maxAzimuthAngle={30 * deg}
       />
-      <EnvFX />
 
       <Stars
         hitboxesRef={starsHitboxesRef}

@@ -53,7 +53,7 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
                   name={`star${index}`}
                   position={system.position}
                   color={system.star.color}
-                  scale={0.4 + system.star.mass * 0.03}
+                  scale={system.star.radius}
                   matrixAutoUpdate={false}
                 />
               </Fragment>

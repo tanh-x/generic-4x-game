@@ -44,7 +44,6 @@ const planetCategoriesList = [
   "terrestial",
   "habitable",
   "giant",
-  "special",
 ] as const;
 type PlanetCategory = typeof planetCategoriesList[number];
 
@@ -74,7 +73,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     label: "Rocky Body",
     category: "barren",
     habitationLevel: 1,
-    pWeight: 25,
+    pWeight: 20,
     temperatureRange: [0, 7],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
@@ -150,7 +149,7 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     habitationLevel: 6,
     pWeight: 7,
     temperatureRange: [2, 4],
-    galacticDistanceBias: { threshold: 0.7, amount: 10 },
+    galacticDistanceBias: { threshold: 0.7, amount: 5 },
     baseStats: {
       MATS: 6,
       ENRG: 5,
@@ -331,7 +330,7 @@ export interface Planet {
   };
   misc: {
     temperature: number;
-  }
+  };
 }
 
 export const generatePlanetarySystem = (
@@ -340,17 +339,17 @@ export const generatePlanetarySystem = (
   galacticDistance: number
 ): Planet[] => {
   const generated: Planet[] = [];
-  for (let i = 0; i < 12 ; i++) {
-    if (generated.length === 6 || Math.random() > 1.0 - i * 0.06) {
+  for (let d = 0; d < 12; d += 0.6) {
+    if (generated.length === 7 || Math.random() > 1.0 - d * 0.05) {
       break;
     }
-    if (Math.random() > 0.7) {
+    if (Math.random() > 0.6) {
       continue;
     }
 
     const radiationFlux: number = Math.min(
-      (Math.sqrt(starLuminosity) * 1.46) / (i + 1),
-      7
+      (Math.sqrt(starLuminosity) * 1.8) / (d + 1),
+      8.5
     );
     const temperature: number = clamp(
       radiationFlux + randNormal(0, 1.1, 3.0),
@@ -369,10 +368,12 @@ export const generatePlanetarySystem = (
         inRange(temperature, planetTypesData[key].temperatureRange) &&
         planetTypesData[key].category === planetCategory
     );
-    if (candidateTypes.length === 0) { continue; }
+    if (candidateTypes.length === 0) {
+      continue;
+    }
 
     const weights: number[] = candidateTypes.map(
-      (p) => 
+      (p) =>
         planetTypesData[p].pWeight +
         (galacticDistance >= planetTypesData[p].galacticDistanceBias.threshold
           ? planetTypesData[p].galacticDistanceBias.amount
@@ -390,13 +391,13 @@ export const generatePlanetarySystem = (
 
     const misc: Planet["misc"] = {
       temperature: temperature,
-    }
-  
+    };
+
     // Append new planet onto array
     generated.push({
       type,
       stats,
-      misc
+      misc,
     });
   }
   return generated;

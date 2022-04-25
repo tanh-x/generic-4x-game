@@ -1,14 +1,16 @@
 .outer-box {
   @apply w-24 flex-row justify-center align-middle;
-
+  
   border-top: 2px solid;
   border-bottom: 2px solid;
-
+  
   backface-visibility: hidden;
   user-select: none;
-
+  
   transform: translate(-50%, -160%);
   transition: cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
+  
+  white-space: nowrap;
 }
 
 .name-box {
