@@ -112,7 +112,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
           .clone() // Dont mutate the camera vector
           .sub(controlsRef.current.target) // Get directional vector of camera
           .normalize()
-          .multiplyScalar(40) // Zoom in
+          .multiplyScalar(30) // Zoom in
           .toArray()
       ) as Array3,
     });

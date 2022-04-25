@@ -145,8 +145,8 @@ export interface paramsProps {
 }
 
 export const params: paramsProps = {
-  radius: 170,
-  starCount: 100,
+  radius: 120,
+  starCount: 60,
   distribution: "gaussian",
   maxEdgeLength: 30,
   maxEdgesPerNode: 5,
@@ -202,7 +202,7 @@ for (let i = 0; i < params.starCount; i++) {
     radius: 1, // default, will be set soon
     luminosity: _data.luminosity * randNormal(1, 0.16, 0.3),
   };
-  star.radius = 0.4 + star.mass * 0.03
+  star.radius = 0.6 + star.mass * 0.027
 
   let position: [x: number, y: number, z: number] = [0, 0, 0];
   // Generate XZ position, regenerate if manhattan distance < threshold

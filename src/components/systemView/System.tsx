@@ -30,7 +30,7 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
     return {
       position: initialCameraPosition,
       config: {
-        tension: 100,
+        tension: 120,
         precision: 0.005,
       },
       onChange: (): void => {
@@ -79,7 +79,7 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
         position: addArrays(system.position, [2.5, 0, 0]) as Array3,
       });
       transitionSpringAPI.start({
-        position: addArrays(system.position, [2.5, 0, 2.5]) as Array3,
+        position: addArrays(system.position, [2.5, 0, 3.0]) as Array3,
       });
     }
 
@@ -107,7 +107,7 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
       {/* Similar to the star on the galaxy view, but higher quality */}
       <mesh position={system.position}>
         <icosahedronBufferGeometry args={[system.star.radius, 10]} />
-        <meshBasicMaterial />
+        <meshBasicMaterial color={system.star.color}/>
       </mesh>
       <group position={system.position}></group>
     </>
