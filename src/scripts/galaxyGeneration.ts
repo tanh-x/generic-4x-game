@@ -5,6 +5,7 @@ import {
   randNormal,
   randChoose,
   intersectingEdges,
+  sumOfSquares,
 } from "_helpers";
 import generateName from "scripts/generateName";
 import { generatePlanetarySystem, Planet } from "./planetaryGeneration";
@@ -70,7 +71,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     pWeight: 6,
     color: ["#F8F7FF", "#F9F5FF", "#FFF4EA", "#FFF5F5"],
     massRange: [1.5, 2.8],
-    luminosity: 45
+    luminosity: 45,
   },
   yellow: {
     label: "Yellow",
@@ -112,16 +113,16 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     massRange: [0.05, 0.13],
     luminosity: 1,
   },
-} as const;
+};
 const pWeightList = Object.values(spectralClassesData).map(
   (_sc) => _sc.pWeight
 );
 
 export interface StellarBody {
   spectralClass: string;
-  luminosityClass: string;
   color: string;
   mass: number;
+  luminosity: number;
 }
 
 export interface StarSystem {
@@ -194,9 +195,9 @@ for (let i = 0; i < params.starCount; i++) {
   const name = generateName();
   const star: StellarBody = {
     spectralClass: _sc,
-    luminosityClass: "mainsequence",
     color: randChoose(_data.color),
     mass: randUniform(..._data.massRange),
+    luminosity: _data.luminosity * randNormal(1, 0.16, 0.3),
   };
 
   let position: [x: number, y: number, z: number] = [0, 0, 0];
@@ -221,11 +222,15 @@ for (let i = 0; i < params.starCount; i++) {
     } else {
       break;
     }
-
-    const planets = generatePlanetarySystem();
   }
   // Add random y-coord variation
   position[1] = randNormal(0, 2.7, 4.5);
+
+  const planets = generatePlanetarySystem(
+    star.luminosity,
+    star.mass,
+    Math.sqrt(sumOfSquares(position)) / params.radius
+  );
 
   SYSTEMS.push({
     index: i,

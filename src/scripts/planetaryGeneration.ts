@@ -1,4 +1,10 @@
-import { randChoose, randNormal, weightedChoice, clamp, inRange } from "_helpers";
+import {
+  randChoose,
+  randNormal,
+  weightedChoice,
+  clamp,
+  inRange,
+} from "_helpers";
 
 const normaliseDensityIntegral = 1.0 / Math.sqrt(2.0 * Math.PI);
 const normalPD = (x: number, mu: number, sigma: number): number => {
@@ -29,7 +35,7 @@ const planetTypesList = [
   "methane",
   "alkali",
   "silicate",
-  "substellar"
+  "substellar",
 ] as const;
 type PlanetType = typeof planetTypesList[number];
 
@@ -49,17 +55,17 @@ interface PlanetProps {
   pWeight: number;
   // 0: ice, 1: cold, 2: low-habitable, 3: mid-habitable, 4: high-habitable,
   // 5: hot, 6: burning, 7: melting, 8: substellar
-  temperatureRange: number[];
+  temperatureRange: [low: number, high: number];
   galacticDistanceBias: {
     threshold: number; // distance from galactic center to apply bias
     amount: number; // bias amount, can be negative to bias towards center
   };
   baseStats: {
-    MATS: number,
-    ENRG: number,
-    SCIS: number,
-    CRED: number,
-  }
+    MATS: number;
+    ENRG: number;
+    SCIS: number;
+    CRED: number;
+  };
 }
 
 export const planetTypesData: Record<PlanetType, PlanetProps> = {
@@ -306,59 +312,77 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
       ENRG: 60,
       SCIS: 8,
       CRED: -40,
-    }
-  }
-} as const;
+    },
+  },
+};
 
 export interface Planet {
   type: PlanetType;
   stats: {
-    FOOD: number,
-    INFL: number,
-    APRV: number,
-    MATS: number,
-    ENRG: number,
+    FOOD: number;
+    INFL: number;
+    APRV: number;
+    MATS: number;
+    ENRG: number;
     // MPWR: number,
     // INDT: number,
-    SCIS: number,
-    CRED: number,
-  }
+    SCIS: number;
+    CRED: number;
+  };
 }
 
 export const generatePlanetarySystem = (
   starLuminosity: number,
   starMass: number,
-  galacticDistance: number,
+  galacticDistance: number
 ): Planet[] => {
   const generated: Planet[] = [];
   for (let i = 0; i < 7 /* maximum amount of planets */; i++) {
-    if (Math.random() < (1.0 - i * 0.08)) { break; }
-    const radiationFlux: number = Math.min(Math.sqrt(starLuminosity) * 1.46 / (i + 1), 7);
-    const temperature: number = clamp(radiationFlux + randNormal(0, 1.1, 3.0), 0, 8);
+    if (Math.random() < 1.0 - i * 0.08) {
+      break;
+    }
+
+    const radiationFlux: number = Math.min(
+      (Math.sqrt(starLuminosity) * 1.46) / (i + 1),
+      7
+    );
+    const temperature: number = clamp(
+      radiationFlux + randNormal(0, 1.1, 3.0),
+      0,
+      8
+    );
     // TODO: Category as a function of distance and mass
-    const planetCategory: PlanetCategory = randChoose(planetCategoriesList);
-    const candidateTypes: PlanetType[] = Object.keys(planetTypesData).filter(
-      (key) => (
+    const planetCategory: PlanetCategory = randChoose([
+      ...planetCategoriesList,
+    ]);
+    const candidateTypes: PlanetType[] = (
+      Object.keys(planetTypesData) as PlanetType[]
+    ).filter(
+      (key) =>
         planetTypesData[key].category === planetCategory &&
         inRange(temperature, planetTypesData[key].temperatureRange)
-      )
     );
-    const weights: number[] = candidateTypes.map((p) => (
-      p.pWeight +
-      (galacticDistance >= p.galacticDistanceBias.threshold) ? p.galacticDistanceBias.amount : 0)
+    const weights: number[] = candidateTypes.map(
+      (p) =>
+        planetTypesData[p].pWeight +
+        (galacticDistance >= planetTypesData[p].galacticDistanceBias.threshold
+          ? planetTypesData[p].galacticDistanceBias.amount
+          : 0)
     );
+
     const type: PlanetType = candidateTypes[weightedChoice(weights)];
     const _data: PlanetProps = planetTypesData[type];
-    const stats = {
+    const stats: Planet["stats"] = {
       ..._data.baseStats, // mats, enrg, scis, cred
       FOOD: _data.habitationLevel * 3,
-      INFL: Math.round((1 - distance) * 4),
-      
+      INFL: Math.round((1 - galacticDistance) * 4),
+      APRV: _data.habitationLevel - 3,
     };
-    
+
     // Append new planet onto array
     generated.push({
       type,
+      stats,
     });
   }
   return generated;

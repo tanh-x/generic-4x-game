@@ -152,3 +152,7 @@ export function inRange(num: number, range: [low: number, high: number], inclusi
   // return (num > range[0] && num < range[1]) && (!inclusive || num === range[0] || num === range[1]);
   return (inclusive ?? true) ? (num >= range[0] && num <= range[1]) : (num > range[0] && num < range[1]);
 }
+
+export function sumOfSquares(arr: number[]): number {
+  return arr.map(x => x * x).reduce((a, b) => (a + b));
+}

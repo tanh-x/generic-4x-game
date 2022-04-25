@@ -13,6 +13,7 @@
 
 .name-box {
   @apply h-6 text-base text-center z-20;
+  text-shadow: -1px -1px 0 #444, 1px -1px 0 #444, -1px 1px 0 #444, 1px 1px 0 #444;
 }
 
 .planet-box {

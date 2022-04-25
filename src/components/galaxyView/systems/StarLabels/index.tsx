@@ -52,7 +52,7 @@ const StarLabels: FunctionComponent<StarLabelsProps> = (props): JSX.Element => {
                 height: 0,
                 width: 0,
                 border: "1px solid #fff",
-                opacity: zoomLevel >= 2 ? 0 : 0.8,
+                opacity: zoomLevel >= 2 ? 0 : 1,
                 transition: "opacity .2s",
               }}
             >
@@ -91,8 +91,8 @@ const Label: FunctionComponent<LabelProps> = (props): JSX.Element => {
           ...{ borderColor: props.system.star.color },
         }}
       >
-        <div className="name-box" style={{ background: "#fff6" }}>
-          <b>{props.system.name}</b>
+        <div className="name-box" style={{ background: "#fff7" }}>
+          <span>{props.system.name}</span>
         </div>
         <div
           className="planet-box"
