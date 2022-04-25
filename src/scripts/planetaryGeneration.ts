@@ -1,4 +1,4 @@
-import { randChoose, randNormal, clamp, inRange } from "_helpers";
+import { randChoose, randNormal, weightedChoice, clamp, inRange } from "_helpers";
 
 const normaliseDensityIntegral = 1.0 / Math.sqrt(2.0 * Math.PI);
 const normalPD = (x: number, mu: number, sigma: number): number => {
@@ -55,10 +55,10 @@ interface PlanetProps {
     amount: number; // bias amount, can be negative to bias towards center
   };
   baseStats: {
-    materials: number,
-    energy: number,
-    science: number,
-    credits: number,
+    MATS: number,
+    ENRG: number,
+    SCIS: number,
+    CRED: number,
   }
 }
 
@@ -72,10 +72,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [0, 5],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
-      materials: 6,
-      energy: 3,
-      science: 4,
-      credits: 2,
+      MATS: 6,
+      ENRG: 3,
+      SCIS: 4,
+      CRED: 2,
     },
   },
   icy: {
@@ -86,10 +86,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [0, 2],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
-      materials: 4,
-      energy: 2,
-      science: 6,
-      credits: 3,
+      MATS: 4,
+      ENRG: 2,
+      SCIS: 6,
+      CRED: 3,
     },
   },
   metallic: {
@@ -100,10 +100,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [2, 5],
     galacticDistanceBias: { threshold: 0.5, amount: 10 },
     baseStats: {
-      materials: 8,
-      energy: 4,
-      science: 3,
-      credits: 4,
+      MATS: 8,
+      ENRG: 4,
+      SCIS: 3,
+      CRED: 4,
     },
   },
 
@@ -116,10 +116,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [5, 7],
     galacticDistanceBias: { threshold: 0.3, amount: -10 },
     baseStats: {
-      materials: 12,
-      energy: 10,
-      science: 5,
-      credits: 6,
+      MATS: 12,
+      ENRG: 10,
+      SCIS: 5,
+      CRED: 6,
     },
   },
   carbonic: {
@@ -130,10 +130,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [1, 5],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
-      materials: 14,
-      energy: 7,
-      science: 4,
-      credits: 6,
+      MATS: 14,
+      ENRG: 7,
+      SCIS: 4,
+      CRED: 6,
     },
   },
 
@@ -146,10 +146,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [3, 3],
     galacticDistanceBias: { threshold: 0.7, amount: 10 },
     baseStats: {
-      materials: 6,
-      energy: 5,
-      science: 10,
-      credits: 16,
+      MATS: 6,
+      ENRG: 5,
+      SCIS: 10,
+      CRED: 16,
     },
   },
   ocean: {
@@ -160,10 +160,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [2, 3],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
-      materials: 3,
-      energy: 3,
-      science: 16,
-      credits: 10,
+      MATS: 3,
+      ENRG: 3,
+      SCIS: 16,
+      CRED: 10,
     },
   },
   desert: {
@@ -174,10 +174,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [3, 4],
     galacticDistanceBias: { threshold: 0.3, amount: -5 },
     baseStats: {
-      materials: 8,
-      energy: 5,
-      science: 10,
-      credits: 10,
+      MATS: 8,
+      ENRG: 5,
+      SCIS: 10,
+      CRED: 10,
     },
   },
   arsenic: {
@@ -188,10 +188,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [2, 3],
     galacticDistanceBias: { threshold: 0.3, amount: -5 },
     baseStats: {
-      materials: 10,
-      energy: 5,
-      science: 12,
-      credits: 8,
+      MATS: 10,
+      ENRG: 5,
+      SCIS: 12,
+      CRED: 8,
     },
   },
   desolate: {
@@ -202,10 +202,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [2, 2],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
-      materials: 6,
-      energy: 3,
-      science: 6,
-      credits: 6,
+      MATS: 6,
+      ENRG: 3,
+      SCIS: 6,
+      CRED: 6,
     },
   },
 
@@ -218,10 +218,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [3, 5],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
-      materials: 15,
-      energy: 15,
-      science: 15,
-      credits: -6,
+      MATS: 15,
+      ENRG: 15,
+      SCIS: 15,
+      CRED: -6,
     },
   },
   hydrogen: {
@@ -232,10 +232,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [0, 1],
     galacticDistanceBias: { threshold: 0.6, amount: -8 },
     baseStats: {
-      materials: 10,
-      energy: 5,
-      science: 15,
-      credits: 0,
+      MATS: 10,
+      ENRG: 5,
+      SCIS: 15,
+      CRED: 0,
     },
   },
   ammonia: {
@@ -246,10 +246,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [1, 2],
     galacticDistanceBias: { threshold: 0.5, amount: -4 },
     baseStats: {
-      materials: 15,
-      energy: 8,
-      science: 15,
-      credits: -6,
+      MATS: 15,
+      ENRG: 8,
+      SCIS: 15,
+      CRED: -6,
     },
   },
   methane: {
@@ -260,10 +260,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [1, 3],
     galacticDistanceBias: { threshold: 0, amount: 0 },
     baseStats: {
-      materials: 8,
-      energy: 15,
-      science: 15,
-      credits: -6,
+      MATS: 8,
+      ENRG: 15,
+      SCIS: 15,
+      CRED: -6,
     },
   },
   alkali: {
@@ -274,10 +274,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [4, 5],
     galacticDistanceBias: { threshold: 0.7, amount: 6 },
     baseStats: {
-      materials: 12,
-      energy: 36,
-      science: 15,
-      credits: -12,
+      MATS: 12,
+      ENRG: 36,
+      SCIS: 15,
+      CRED: -12,
     },
   },
   silicate: {
@@ -288,10 +288,10 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [5, 8],
     galacticDistanceBias: { threshold: 0.85, amount: 8 },
     baseStats: {
-      materials: 48,
-      energy: 16,
-      science: 15,
-      credits: -30,
+      MATS: 48,
+      ENRG: 16,
+      SCIS: 15,
+      CRED: -30,
     },
   },
   substellar: {
@@ -302,16 +302,27 @@ export const planetTypesData: Record<PlanetType, PlanetProps> = {
     temperatureRange: [7, 8],
     galacticDistanceBias: { threshold: 0.85, amount: 10 },
     baseStats: {
-      materials: 5,
-      energy: 60,
-      science: 8,
-      credits: -40,
+      MATS: 5,
+      ENRG: 60,
+      SCIS: 8,
+      CRED: -40,
     }
   }
 } as const;
 
 export interface Planet {
   type: PlanetType;
+  stats: {
+    FOOD: number,
+    INFL: number,
+    APRV: number,
+    MATS: number,
+    ENRG: number,
+    // MPWR: number,
+    // INDT: number,
+    SCIS: number,
+    CRED: number,
+  }
 }
 
 export const generatePlanetarySystem = (
@@ -332,9 +343,18 @@ export const generatePlanetarySystem = (
         inRange(temperature, planetTypesData[key].temperatureRange)
       )
     );
-    const type = randChoose(candidateTypes);
+    const weights: number[] = candidateTypes.map((p) => (
+      p.pWeight +
+      (galacticDistance >= p.galacticDistanceBias.threshold) ? p.galacticDistanceBias.amount : 0)
+    );
+    const type: PlanetType = candidateTypes[weightedChoice(weights)];
     const _data: PlanetProps = planetTypesData[type];
-    const stats = {..._data.baseStats};
+    const stats = {
+      ..._data.baseStats, // mats, enrg, scis, cred
+      FOOD: _data.habitationLevel * 3,
+      INFL: Math.round((1 - distance) * 4),
+      
+    };
     
     // Append new planet onto array
     generated.push({

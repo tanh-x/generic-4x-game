@@ -148,6 +148,7 @@ export function addArrays(arr1: number[], arr2: number[]): number[] {
   return arr1.map((x, i) => (x + arr2[i]));
 }
 
-export function inRange(num: number, range: [lower: number, upper: number], inclusive?: boolean): boolean {
+export function inRange(num: number, range: [low: number, high: number], inclusive?: boolean): boolean {
+  // return (num > range[0] && num < range[1]) && (!inclusive || num === range[0] || num === range[1]);
   return (inclusive ?? true) ? (num >= range[0] && num <= range[1]) : (num > range[0] && num < range[1]);
 }
