@@ -38,7 +38,7 @@ const StarLabels: FunctionComponent<StarLabelsProps> = (props): JSX.Element => {
   });
 
   return (
-    <group ref={props.labelsRef}>
+    <group name="system labels" ref={props.labelsRef}>
       {_GAME.GALAXY.systems.map((system: StarSystem, index: number) => {
         return (
           <Fragment key={index}>

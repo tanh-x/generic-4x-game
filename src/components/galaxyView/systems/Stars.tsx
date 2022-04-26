@@ -31,7 +31,7 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
     [
       ...starInstancesRef.current.children,
       ...props.hitboxesRef.current.children,
-      // ...labelsRef.current.children,
+      ...labelsRef.current.children,
     ].map((ob: THREE.Object3D): void => {
       ob.updateMatrix();
     });
@@ -42,7 +42,11 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
   return (
     <>
       {/* Stars */}
-      <Instances ref={starInstancesRef} limit={_GAME.GALAXY.genParams.starCount}>
+      <Instances
+        name="star systems instances"
+        ref={starInstancesRef}
+        limit={_GAME.GALAXY.genParams.starCount}
+      >
         <icosahedronBufferGeometry args={[1, 2]} />
         <meshBasicMaterial />
         {_GAME.GALAXY.systems.map(
@@ -63,13 +67,11 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
       </Instances>
 
       {/* HTML labels */}
-      {/* <StarLabels
-        labelsRef={labelsRef}
-        controlsRef={props.controlsRef}
-      /> */}
+      <StarLabels labelsRef={labelsRef} controlsRef={props.controlsRef} />
 
       {/* Hitboxes for click to focus */}
       <Instances
+        name ="raycast hitboxes instances"  
         ref={props.hitboxesRef}
         limit={_GAME.GALAXY.genParams.starCount}
         visible={false}

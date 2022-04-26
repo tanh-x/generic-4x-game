@@ -46,7 +46,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
       position: camera.position.toArray(),
       reset: true,
       config: {
-        tension: 100,
+        tension: 180,
         precision: 0.05,
       },
       onChange: () => {

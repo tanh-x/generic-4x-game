@@ -1,6 +1,11 @@
-import { FunctionComponent } from "react";
-import { Color } from "three";
-import { Instance, Instances, Line } from "@react-three/drei";
+import { useEffect, useRef, FunctionComponent } from "react";
+import { useThree } from "@react-three/fiber";
+import { Color, Vector3 } from "three";
+import {
+  Line,
+  Segments,
+  Segment,
+} from "@react-three/drei";
 
 import { StarSystem } from "scripts/galaxyGeneration";
 import { addArrays, Array3 } from "_helpers";
@@ -11,6 +16,8 @@ interface EdgesProps {
 }
 
 const Paths: FunctionComponent<EdgesProps> = (props): JSX.Element => {
+  const { scene } = useThree();
+  const segmentsRef = useRef<any>();
 
   return (
     <>
@@ -18,6 +25,7 @@ const Paths: FunctionComponent<EdgesProps> = (props): JSX.Element => {
         props.edgeList.map((edge, index) => {    
           return (
             <Line
+              name="dd"
               key={index}
               points={[
                 props.systems[edge[0]].position,
@@ -28,7 +36,7 @@ const Paths: FunctionComponent<EdgesProps> = (props): JSX.Element => {
                 new Color(props.systems[edge[0]].star.color),
                 new Color(props.systems[edge[1]].star.color),
               ]}
-              color={"hsl(0, 0%, 90%)"}
+              color={"#fff"}
               linewidth={0.8}
               alphaWrite={undefined}
               matrixAutoUpdate={false}
@@ -36,6 +44,15 @@ const Paths: FunctionComponent<EdgesProps> = (props): JSX.Element => {
           );
         })
       }
+      {/* <Segments ref={segmentsRef} limit={props.edgeList.length} lineWidth={0.8}>
+        {props.edgeList.map((edge, index) => (
+          <Segment
+            key={index}
+            start={new Vector3(...props.systems[edge[0]].position)}
+            end={new Vector3(...props.systems[edge[1]].position)}
+          />
+        ))}
+      </Segments> */}
     </>
   );
 };

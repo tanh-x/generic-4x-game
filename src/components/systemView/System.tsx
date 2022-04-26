@@ -65,7 +65,18 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
   const onLClick = (): void => {};
 
   const onRClick = (): void => {
-    props.switchView("galaxy");
+    pivotSpringAPI.start({
+      position: system.position,
+    });
+    transitionSpringAPI.start({
+      position: initialCameraPosition,
+    });
+    setTimeout(() => {
+      camera.position.set(...initialCameraPosition);
+      props.switchView("galaxy");
+    }, 600);
+    // camera.position.set(...initialCameraPosition);
+    // props.switchView("galaxy");
   };
 
   useEffect(() => {
@@ -79,14 +90,13 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
         position: addArrays(system.position, [2.5, 0, 0]) as Array3,
       });
       transitionSpringAPI.start({
-        position: addArrays(system.position, [2.5, 0, 3.0]) as Array3,
+        position: addArrays(system.position, [2.5, 0, 4.0]) as Array3,
       });
     }
 
     document.addEventListener("click", onLClick);
     document.addEventListener("contextmenu", onRClick);
     return (): void => {
-      camera.position.set(...initialCameraPosition);
       document.removeEventListener("click", onLClick);
       document.removeEventListener("contextmenu", onRClick);
     };
@@ -107,7 +117,7 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
       {/* Similar to the star on the galaxy view, but higher quality */}
       <mesh position={system.position}>
         <icosahedronBufferGeometry args={[system.star.radius, 10]} />
-        <meshBasicMaterial color={system.star.color}/>
+        <meshBasicMaterial color={system.star.color} />
       </mesh>
       <group position={system.position}></group>
     </>
