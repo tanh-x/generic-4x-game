@@ -1,3 +1,5 @@
+import { Color } from "three";
+
 import {
   randint,
   weightedChoice,
@@ -122,6 +124,7 @@ const pWeightList = Object.values(spectralClassesData).map(
 export interface StellarBody {
   spectralClass: string;
   color: string;
+  // color3: Color;
   mass: number;
   radius: number;
   luminosity: number;
@@ -177,9 +180,9 @@ const generate2DPosition = (): [x: number, y: number, z: number] => {
     ];
   } else if (params.distribution === "gaussian") {
     return [
-      randNormal(0, params.radius * 0.33, 1.1 * params.radius),
+      randNormal(0, params.radius * 0.4, 1.1 * params.radius),
       0,
-      randNormal(0, params.radius * 0.33, 1.1 * params.radius),
+      randNormal(0, params.radius * 0.4, 1.1 * params.radius),
     ];
   }
   return [0, -20, 0];
@@ -189,6 +192,7 @@ const getXZ = (index: number): [x: number, z: number] => {
   return [SYSTEMS[index].position[0], SYSTEMS[index].position[2]];
 };
 
+// const defaultColor3 = new Color("black");
 // Generating star systems
 for (let i = 0; i < params.starCount; i++) {
   const _sc: SpectralType = spectralTypesList[weightedChoice(pWeightList)];
@@ -198,10 +202,13 @@ for (let i = 0; i < params.starCount; i++) {
   const star: StellarBody = {
     spectralClass: _sc,
     color: randChoose(_data.color),
+    // color3: defaultColor3, // default, will be changed
     mass: randUniform(..._data.massRange),
     radius: 1, // default, will be set soon
     luminosity: _data.luminosity * randNormal(1, 0.16, 0.3),
   };
+  // Behaves weirdly based on the default color, check later 
+  // star.color3 = new Color(star.color);
   star.radius = 0.6 + star.mass * 0.027
 
   let position: [x: number, y: number, z: number] = [0, 0, 0];
@@ -258,7 +265,7 @@ for (let i = 0; i < params.starCount; i++) {
     if (
       j === i || // if it is itself
       systemsAdjList[j].length >= params.maxEdgesPerNode || // if the destination has enough edges
-      systemsAdjList[j].includes(j) // if theyre already linked
+      systemsAdjList[i].includes(j) // if theyre already linked
     ) {
       continue;
     }

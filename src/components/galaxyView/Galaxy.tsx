@@ -149,10 +149,10 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
       <MapControls
         ref={controlsRef}
         // enableRotate={false}
-        dampingFactor={0.08}
+        dampingFactor={0.15}
         minDistance={10}
         zoomSpeed={2}
-        maxDistance={300}
+        maxDistance={_GAME.GALAXY.genParams.radius * 3}
         maxPolarAngle={50 * deg}
         minAzimuthAngle={-30 * deg}
         maxAzimuthAngle={30 * deg}

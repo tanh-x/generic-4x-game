@@ -31,7 +31,7 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
     [
       ...starInstancesRef.current.children,
       ...props.hitboxesRef.current.children,
-      ...labelsRef.current.children,
+      // ...labelsRef.current.children,
     ].map((ob: THREE.Object3D): void => {
       ob.updateMatrix();
     });
@@ -63,10 +63,10 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
       </Instances>
 
       {/* HTML labels */}
-      <StarLabels
+      {/* <StarLabels
         labelsRef={labelsRef}
         controlsRef={props.controlsRef}
-      />
+      /> */}
 
       {/* Hitboxes for click to focus */}
       <Instances

@@ -3,6 +3,7 @@ import { Color } from "three";
 import { Instance, Instances, Line } from "@react-three/drei";
 
 import { StarSystem } from "scripts/galaxyGeneration";
+import { addArrays, Array3 } from "_helpers";
 
 interface EdgesProps {
   edgeList: Array<[number, number]>;
@@ -10,6 +11,7 @@ interface EdgesProps {
 }
 
 const Paths: FunctionComponent<EdgesProps> = (props): JSX.Element => {
+
   return (
     <>
       {

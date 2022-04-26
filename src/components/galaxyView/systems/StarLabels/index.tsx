@@ -51,7 +51,6 @@ const StarLabels: FunctionComponent<StarLabelsProps> = (props): JSX.Element => {
                 pointerEvents: "none",
                 height: 0,
                 width: 0,
-                border: "1px solid #fff",
                 opacity: zoomLevel >= 2 ? 0 : 1,
                 transition: "opacity .2s",
               }}
