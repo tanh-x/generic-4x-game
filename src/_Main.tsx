@@ -29,15 +29,22 @@ const _GAME: GamestateProps = {
     adjList: GalaxyGeneration.systemsAdjList,
     edgeList: GalaxyGeneration.systemsEdgeList,
   },
+  PLAYERS: [
+
+  ],
+  TEAMS: [
+    
+  ],
   turn: 0,
 };
 export const GamestateContext = createContext(_GAME);
 
 const Main: FunctionComponent<{}> = (): JSX.Element => {
   // console.log("RENDER main");
-  const { camera } = useThree();
+  const { camera, gl } = useThree();
 
   type ViewportType = "galaxy" | "system";
+  const [enablePP, setEnablePP] = useState(true);
   const [viewportState, setViewportState] = useState<ViewportType>("galaxy");
   const focusedIndexRef = useRef<number | undefined>(undefined);
 
@@ -61,11 +68,11 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
       {/* <axesHelper position={[0, 0.001, 0]} args={[5]} /> */}
       {/* <gridHelper args={[200, 20]}/> */}
 
-      {true && (
+      {enablePP && (
         <>
           <EnvFX />
           <EffectComposer>
-            <Bloom luminanceThreshold={0.07} kernelSize={3} height={512} />
+            <Bloom luminanceThreshold={0.07} kernelSize={4} height={1024} />
           </EffectComposer>
         </>
       )}

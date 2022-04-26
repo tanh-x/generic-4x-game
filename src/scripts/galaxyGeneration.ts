@@ -24,6 +24,8 @@ export const spectralTypesList = [
   "red",
   "brown",
   "subbrown",
+
+  "blackhole",
 ] as const;
 
 export type SpectralType = typeof spectralTypesList[number];
@@ -55,7 +57,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
   bluewhite: {
     label: "Blue-White",
     symbol: "B",
-    pWeight: 8,
+    pWeight: 10,
     color: ["#A3C5FF", "#B2E1FF", "#B5DAFF", "#B4F1FF"],
     massRange: [5.5, 12],
     luminosity: 120,
@@ -87,7 +89,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
   orange: {
     label: "Orange",
     symbol: "K  ",
-    pWeight: 20,
+    pWeight: 16,
     color: ["#FFD2A1", "#FFC199", "#FFBB78", "#FFDAB5"],
     massRange: [0.3, 0.8],
     luminosity: 20,
@@ -95,7 +97,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
   red: {
     label: "Red",
     symbol: "M",
-    pWeight: 25,
+    pWeight: 20,
     color: ["#FFB56C", "#FFAC6F", "#FF932C", "#FFAD5E"],
     massRange: [0.08, 0.3],
     luminosity: 12,
@@ -115,6 +117,15 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     color: ["#BF654C", "#CF5C5F", "#C3636C", "#CF6D7E"],
     massRange: [0.05, 0.13],
     luminosity: 1,
+  },
+
+  blackhole: {
+    label: "Black Hole",
+    symbol: "BH",
+    pWeight: 0,
+    color: ["#111"],
+    massRange: [50, 100],
+    luminosity: 0,
   },
 };
 const pWeightList = Object.values(spectralClassesData).map(
@@ -148,12 +159,12 @@ export interface paramsProps {
 }
 
 export const params: paramsProps = {
-  radius: 120,
-  starCount: 60,
+  radius: 270,
+  starCount: 100,
   distribution: "gaussian",
-  maxEdgeLength: 30,
-  maxEdgesPerNode: 5,
-  minDistance: 20,
+  maxEdgeLength: 72,
+  maxEdgesPerNode: 4,
+  minDistance: 52,
 };
 
 const SYSTEMS: StarSystem[] = [];
@@ -194,7 +205,38 @@ const getXZ = (index: number): [x: number, z: number] => {
 
 // const defaultColor3 = new Color("black");
 // Generating star systems
-for (let i = 0; i < params.starCount; i++) {
+// First, put a central blackhole
+// MUST BE INDEX 0 (or files: galaxygen will break)
+SYSTEMS.push({
+  index: 0,
+  name: randChoose([
+    "Tartaros",
+    "Erebus",
+    "Naraka",
+    "Osiris",
+    "Anubis",
+    "Irkalla",
+    "Ereshkigal",
+    "Elysium",
+    "Jahannam",
+    "Hades",
+    "Nyx",
+  ]),
+  star: {
+    spectralClass: "blackhole",
+    color: "#111",
+    mass: 2_418_114,
+    radius: 4,
+    luminosity: 0,
+  },
+  planets: [],
+  position: [0, 0, 0],
+});
+// Place special systems
+
+// Generate the rest of the galaxy
+const remaining = params.starCount - SYSTEMS.length;
+for (let i = 0; i < remaining; i++) {
   const _sc: SpectralType = spectralTypesList[weightedChoice(pWeightList)];
   const _data: SpectralClassProps = spectralClassesData[_sc];
 
@@ -209,17 +251,20 @@ for (let i = 0; i < params.starCount; i++) {
   };
   // Behaves weirdly based on the default color, check later
   // star.color3 = new Color(star.color);
-  star.radius = 0.6 + star.mass * 0.027;
+  star.radius = 0.73 + star.mass * 0.072;
 
   let position: [x: number, y: number, z: number] = [0, 0, 0];
   // Generate XZ position, regenerate if manhattan distance < threshold
-  const maxIters = 50;
+  const maxIters = 70;
   for (let iter = 0; iter < maxIters; iter++) {
+    if (iter === 49) {
+      console.log(i);
+    }
     let checkFailed = false;
     position = generate2DPosition();
     if (params.minDistance === undefined || SYSTEMS.length === 0) break;
     // The check will get less strict over many iterations
-    const threshold = ((-0.6 / maxIters) * iter + 1.2) * params.minDistance;
+    const threshold = ((-0.7 / maxIters) * iter + 1.2) * params.minDistance;
     for (let k = 0; k < SYSTEMS.length; k++) {
       const dx = Math.abs(position[0] - SYSTEMS[k].position[0]);
       const dz = Math.abs(position[2] - SYSTEMS[k].position[2]);
@@ -235,7 +280,7 @@ for (let i = 0; i < params.starCount; i++) {
     }
   }
   // Add random y-coord variation
-  position[1] = randNormal(0, 2.7, 4.5);
+  position[1] = randNormal(0, 7.7, 12.5);
 
   const planets = generatePlanetarySystem(
     star.luminosity,
@@ -251,6 +296,14 @@ for (let i = 0; i < params.starCount; i++) {
     planets,
   });
 }
+// Pick 2 points that will bisect the galaxy
+const bisectorAngle = randUniform(0, Math.PI);
+const bisectorA: [number, number] = [
+  params.radius * 2 * Math.cos(bisectorAngle),
+  params.radius * 2 * Math.sin(bisectorAngle) + 0.01,
+];
+const bisectorB: [number, number] = [-bisectorA[0], -bisectorA[1]];
+console.log(bisectorA, bisectorB)
 
 // Generating links between stars
 for (let i = 0; i < params.starCount; i++) {
@@ -261,7 +314,8 @@ for (let i = 0; i < params.starCount; i++) {
     if (systemsAdjList[i].length >= params.maxEdgesPerNode) {
       break;
     }
-    // Stop considering this star
+
+    // Stop considering this star...
     if (
       j === i || // if it is itself
       systemsAdjList[j].length >= params.maxEdgesPerNode || // if the destination has enough edges
@@ -269,20 +323,24 @@ for (let i = 0; i < params.starCount; i++) {
     ) {
       continue;
     }
+
     const dist = Math.sqrt(
       (SYSTEMS[j].position[0] - x) ** 2 + (SYSTEMS[j].position[2] - z) ** 2
     );
     if (
       dist <= params.maxEdgeLength &&
       // Probability as a function of distance and max length
-      Math.random() < 0.9
-      // Math.random() < 0.4 * params.maxEdgeLength / (dist + 0.5)
+      // Math.random() < 0.85
+      (i !== 0 || Math.random() < 0.5 * params.maxEdgeLength / (dist + 0.5))
     ) {
       let hasCollision = false;
       for (let k = 0; k < systemsEdgeList.length; k++) {
         const p1 = systemsEdgeList[k][0];
         const p2 = systemsEdgeList[k][1];
-        if (intersectingEdges(getXZ(i), getXZ(j), getXZ(p1), getXZ(p2))) {
+        if (
+          intersectingEdges(getXZ(i), getXZ(j), getXZ(p1), getXZ(p2)) ||
+          (i !== 0 && intersectingEdges(getXZ(i), getXZ(j), bisectorA, bisectorB))
+        ) {
           hasCollision = true;
           break;
         }
@@ -293,5 +351,8 @@ for (let i = 0; i < params.starCount; i++) {
     }
   }
 }
+// Finishing touches...
+
+// TODO: Connect every isolated systems or groups of linked systems
 
 export { SYSTEMS, systemsAdjList, systemsEdgeList };

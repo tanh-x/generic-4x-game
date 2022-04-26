@@ -87,10 +87,10 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
 
     if (true) {
       pivotSpringAPI.start({
-        position: addArrays(system.position, [2.5, 0, 0]) as Array3,
+        position: addArrays(system.position, [0, -3.6, 0]) as Array3,
       });
       transitionSpringAPI.start({
-        position: addArrays(system.position, [2.5, 0, 4.0]) as Array3,
+        position: addArrays(system.position, [0, -4.6, 7.0]) as Array3,
       });
     }
 

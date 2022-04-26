@@ -24,7 +24,7 @@ import { GamestateContext } from "_Main";
 import Stars from "./systems/Stars";
 import Paths from "./systems/Paths";
 
-const defaultCameraDirection = new THREE.Vector3(0, 5, 1).normalize();
+const defaultCameraDirection = new THREE.Vector3(0, 3, 1).normalize();
 const deg = Math.PI / 180;
 
 interface GalaxyProps {
@@ -91,7 +91,8 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
       props.focusedIndexRef.current = undefined;
       return;
     }
-
+    console.log(_GAME.GALAXY.systems[selectedIndex]);
+    
     if (props.focusedIndexRef.current === selectedIndex) {
       props.switchView("system");
     } else {
@@ -112,7 +113,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
           .clone() // Dont mutate the camera vector
           .sub(controlsRef.current.target) // Get directional vector of camera
           .normalize()
-          .multiplyScalar(30) // Zoom in
+          .multiplyScalar(100) // Zoom in
           .toArray()
       ) as Array3,
     });
@@ -125,7 +126,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
     controlsUpdateFn.current = controlsRef.current.update.bind({});
     if (props.focusedIndexRef.current === undefined) {
       // Should be on initial render
-      camera.position.copy(defaultCameraDirection.clone().multiplyScalar(60));
+      camera.position.copy(defaultCameraDirection.clone().multiplyScalar(139));
       camera.lookAt(0, 0, 0);
     } else {
       // Should be on switching from another view
@@ -150,6 +151,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         ref={controlsRef}
         // enableRotate={false}
         dampingFactor={0.15}
+        panSpeed={0.8}
         minDistance={10}
         zoomSpeed={2}
         maxDistance={_GAME.GALAXY.genParams.radius * 3}

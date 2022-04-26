@@ -339,8 +339,8 @@ export const generatePlanetarySystem = (
   galacticDistance: number
 ): Planet[] => {
   const generated: Planet[] = [];
-  for (let d = 0; d < 12; d += 0.6) {
-    if (generated.length === 7 || Math.random() > 1.0 - d * 0.05) {
+  for (let d = 0; d < 12; d += 0.4) {
+    if (generated.length === 6 || Math.random() > 1.0 - d * 0.05) {
       break;
     }
     if (Math.random() > 0.6) {

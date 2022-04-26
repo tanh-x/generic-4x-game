@@ -29,8 +29,8 @@ const StarLabels: FunctionComponent<StarLabelsProps> = (props): JSX.Element => {
   useFrame((): void => {
     const newZoomLevel = ~~(
       (camera.position.clone().sub(props.controlsRef.current.target).length() -
-        10) /
-      60
+        20) /
+      120
     );
     if (newZoomLevel !== zoomLevel) {
       setZoomLevel(newZoomLevel);
@@ -55,11 +55,7 @@ const StarLabels: FunctionComponent<StarLabelsProps> = (props): JSX.Element => {
                 transition: "opacity .2s",
               }}
             >
-              <Label
-                index={index}
-                system={system}
-                zoomLevel={zoomLevel}
-              />
+              <Label index={index} system={system} zoomLevel={zoomLevel} />
             </Html>
           </Fragment>
         );
@@ -82,15 +78,15 @@ const Label: FunctionComponent<LabelProps> = (props): JSX.Element => {
         style={{
           ...(props.zoomLevel >= 1
             ? {
-                height: "1.75rem",
+                height: "2.25rem",
               }
             : {
-                height: "3.2rem",
+                height: "3.8rem",
               }),
-          ...{ borderColor: props.system.star.color },
+          ...{ borderTop: `0.4em solid ${props.system.star.color}` },
         }}
       >
-        <div className="name-box" style={{ background: "#fff7" }}>
+        <div className="name-box" style={{ background: "rgba(100, 116, 139, 0.5)"}}>
           <span>{props.system.name}</span>
         </div>
         <div
@@ -98,7 +94,7 @@ const Label: FunctionComponent<LabelProps> = (props): JSX.Element => {
           style={
             props.zoomLevel >= 1
               ? {
-                  transform: "translate(0, -1.75em)",
+                  transform: "translate(0, 1.2em)",
                   opacity: "0",
                 }
               : {
@@ -119,7 +115,7 @@ const Label: FunctionComponent<LabelProps> = (props): JSX.Element => {
             transform: "translate(calc(50% - 1px), 20%)",
           }}
         /> */}
-      </div> 
+      </div>
     </>
   );
 };

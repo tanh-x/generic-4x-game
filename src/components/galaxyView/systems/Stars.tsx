@@ -5,11 +5,12 @@ import {
   FunctionComponent,
   Fragment,
 } from "react";
-import { Euler } from "three";
+import { Euler, Color } from "three";
 import { useThree, useFrame } from "@react-three/fiber";
-import { Instance, Instances, Edges } from "@react-three/drei";
+import { Instance, Instances, Ring } from "@react-three/drei";
 
 import { GamestateContext } from "_Main";
+import SystemOrbitsFX from "./SystemOrbitsFX";
 import StarLabels from "./StarLabels";
 import { StarSystem } from "scripts/galaxyGeneration";
 
@@ -41,6 +42,9 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
 
   return (
     <>
+      {/* HTML labels */}
+      <StarLabels labelsRef={labelsRef} controlsRef={props.controlsRef} />
+
       {/* Stars */}
       <Instances
         name="star systems instances"
@@ -66,17 +70,19 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
         )}
       </Instances>
 
-      {/* HTML labels */}
-      <StarLabels labelsRef={labelsRef} controlsRef={props.controlsRef} />
+      {/* Concentric circles around stars */}
+      <SystemOrbitsFX innerRadius={3.1} outerRadius={3.2} color="#2f2f35" />
+      <SystemOrbitsFX innerRadius={3.9} outerRadius={4.0} color="#40454c" />
+      <SystemOrbitsFX innerRadius={4.7} outerRadius={4.8} />
 
       {/* Hitboxes for click to focus */}
       <Instances
-        name ="raycast hitboxes instances"  
+        name="raycast hitboxes instances"
         ref={props.hitboxesRef}
         limit={_GAME.GALAXY.genParams.starCount}
         visible={false}
       >
-        <boxBufferGeometry args={[3, 3, 3]} />
+        <boxBufferGeometry args={[8.5, 8.5, 5]} />
         <meshBasicMaterial wireframe={true} />
         {_GAME.GALAXY.systems.map((system: StarSystem, index: number) => {
           return (
