@@ -51,7 +51,7 @@ export interface paramsProps {
 }
 
 export const params: paramsProps = {
-  radius: 280,
+  radius: 285,
   starCount: 100,
   distribution: "gaussian",
   maxEdgeLength: 72,
@@ -157,17 +157,17 @@ for (let i = SYSTEMS.length; i < params.starCount; i++) {
   };
   // Behaves weirdly based on the default color, check later
   // star.color3 = new Color(star.color);
-  star.radius = 0.6 + Math.sqrt(star.mass) * 0.64;
+  star.radius = 0.9 + Math.sqrt(star.mass) * 0.46;
 
   let position: [x: number, y: number, z: number] = [0, 0, 0];
   // Generate XZ position, regenerate if manhattan distance < threshold
-  const maxIters = 70;
+  const maxIters = 100;
   for (let iter = 0; iter < maxIters; iter++) {
     let checkFailed = false;
     position = generate2DPosition();
     if (params.minDistance === undefined || SYSTEMS.length === 0) break;
     // The check will get less strict over many iterations
-    const threshold = ((-0.7 / maxIters) * iter + 1.2) * params.minDistance;
+    const threshold = ((-0.6 * iter) / maxIters + 1.1) * params.minDistance;
     for (let e = 0; e < SYSTEMS.length; e++) {
       const dx = Math.abs(position[0] - SYSTEMS[e].position[0]);
       const dz = Math.abs(position[2] - SYSTEMS[e].position[2]);
@@ -191,12 +191,9 @@ for (let i = SYSTEMS.length; i < params.starCount; i++) {
     Math.sqrt(sumOfSquares(position)) / params.radius
   );
 
-  
-  const azimuth = Math.atan2(position[2], position[0])
+  const azimuth = Math.atan2(position[2], position[0]);
   const sector =
-    (
-      ((azimuth - phaseAngle + 2 * tau) % tau ) / tau * sectorsCount
-    );
+    (((azimuth - phaseAngle + 2 * tau) % tau) / tau) * sectorsCount;
 
   SYSTEMS.push({
     index: i,
@@ -224,7 +221,7 @@ for (let i = 1; i < params.starCount; i++) {
       j === i || // if it is itself
       systemsAdjList[j].length >= params.maxEdgesPerNode || // if the destination has enough edges
       systemsAdjList[i].includes(j) || // if theyre already linked
-      SYSTEMS[i].sector !== SYSTEMS[j].sector 
+      SYSTEMS[i].sector !== SYSTEMS[j].sector
     ) {
       continue;
     }
@@ -247,9 +244,7 @@ for (let i = 1; i < params.starCount; i++) {
         const p1 = getXZ(systemsEdgeList[e][0]);
         const p2 = getXZ(systemsEdgeList[e][1]);
 
-        if (
-          intersectingEdges(s1, s2, p1, p2)
-        ) {
+        if (intersectingEdges(s1, s2, p1, p2)) {
           hasCollision = true;
           break;
         }

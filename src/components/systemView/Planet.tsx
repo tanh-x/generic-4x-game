@@ -8,7 +8,7 @@ interface PlanetProps {
 const Planet: FunctionComponent<PlanetProps> = (props): JSX.Element => {
   return <>
     <mesh position={props.position}>
-      <icosahedronBufferGeometry args={[0.3, 6]}/>
+      <icosahedronBufferGeometry args={[0.7, 6]}/>
       <meshPhongMaterial />
     </mesh>
   </>;

@@ -85,10 +85,10 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
 
     if (true) {
       pivotSpringAPI.start({
-        position: addArrays(system.position, [0, -4.6, 0]) as Array3,
+        position: addArrays(system.position, [10, 0, 0]) as Array3,
       });
       transitionSpringAPI.start({
-        position: addArrays(system.position, [0, -5.0, 7.0]) as Array3,
+        position: addArrays(system.position, [10, 8, 6]) as Array3,
       });
     }
 
@@ -102,6 +102,7 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
 
   return (
     <>
+
       {/* Similar to the star on the galaxy view, but higher quality */}
       <mesh position={system.position}>
         <icosahedronBufferGeometry args={[system.star.radius, 10]} />
@@ -111,30 +112,32 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
       {/* Lighting setup */}
       <ambientLight color={system.star.color} intensity={0.008} />
       <directionalLight
-        position={[0, 2.0, 2.0]}
+        position={[-200.0, 0, 0]}
         color={"white"}
         intensity={0.32}
       />
       <directionalLight
-        position={[0, 2.0, 2.0]}
+        position={[-200.0, 0, 0]}
         color={system.star.color}
         intensity={0.4}
       />
       <directionalLight
-        position={[0, -1, 0.2]}
+        position={[1, 0, 0.2]}
         color="#322354"
         intensity={0.2}
       />
 
       {/* Planets */}
       <group position={system.position}>
+        <axesHelper args={[10]}/>
         {system.planets.map((planet, index) => (
           <Planet
-            key={index}
+          key={index}
             position={[
-              4 * ((index / (system.planets.length - 1)) - 0.5),
-              -4.3,
-              2.5]
+              10 + 10 * ((index / (system.planets.length - 1)) - 0.5),
+              0,
+              0,  
+            ]
             }
           />
         ))}

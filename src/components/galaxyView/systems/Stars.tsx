@@ -7,7 +7,7 @@ import {
 } from "react";
 import { Euler, Color } from "three";
 import { useThree, useFrame } from "@react-three/fiber";
-import { Instance, Instances, Ring } from "@react-three/drei";
+import { Instance, Instances, useTexture } from "@react-three/drei";
 
 import { GamestateContext } from "_Main";
 import SystemOrbitsFX from "./SystemOrbitsFX";
@@ -51,7 +51,7 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
         ref={starInstancesRef}
         limit={_GAME.GALAXY.genParams.starCount}
       >
-        <icosahedronBufferGeometry args={[1, 2]} />
+        <icosahedronBufferGeometry args={[1, 3]} />
         <meshBasicMaterial />
         {_GAME.GALAXY.systems.map(
           (system: StarSystem, index: number): JSX.Element => {
