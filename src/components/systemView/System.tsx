@@ -7,7 +7,7 @@ import {
   Fragment,
 } from "react";
 import { useThree } from "@react-three/fiber";
-import { Instances, Instance } from "@react-three/drei";
+import { Instances, Instance, MapControls } from "@react-three/drei";
 import { useSpring, animated } from "@react-spring/three";
 
 import { GamestateContext } from "_Main";
@@ -22,8 +22,9 @@ interface SystemProps {
 const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
   console.log("RENDER systemView");
   const { camera } = useThree();
-  const controlsRef = useRef<any>();
   const _GAME = useContext(GamestateContext);
+  const controlsRef = useRef<any>();
+  const gridRef = useRef<any>();
   const system = _GAME.GALAXY.systems[props.focusedIndexRef.current!];
   // Camera position before zooming into the system, will revert back after exiting
   const initialCameraPosition = camera.position.toArray();
@@ -31,16 +32,10 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
     return {
       position: initialCameraPosition,
       config: {
-        tension: 120,
-        precision: 0.005,
+        tension: 160,
+        precision: 0.008,
       },
       onChange: (): void => {
-        camera.lookAt(
-          ...(pivotSpring.position.animation.values.map((c) => {
-            // @ts-ignore
-            return c._value;
-          }) as Array3)
-        );
         camera.position.set(
           ...(transitionSpring.position.animation.values.map((c) => {
             // @ts-ignore
@@ -48,34 +43,42 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
           }) as Array3)
         );
       },
+      onRest: (): void => {
+        if (controlsRef.current === null) return;
+        controlsRef.current.enabled = true;
+      },
     };
   });
-
-  const cameraPivotRef = useRef<THREE.Object3D>();
-  const [pivotSpring, pivotSpringAPI] = useSpring(() => {
+  const [scaleSpring, scaleSpringAPI] = useSpring(() => {
     return {
-      position: system.position,
-      config: {
-        tension: 140,
-        precision: 0.01,
+      from: {
+        gridScale: 3,
+        starScale: system.star.radius,
       },
-      onChange: (): void => {},
+      config: {
+        tension: 75,
+        precision: 0.008,
+      },
     };
   });
 
   const onLClick = (): void => {};
 
   const onRClick = (): void => {
-    pivotSpringAPI.start({
-      position: system.position,
-    });
     transitionSpringAPI.start({
       position: initialCameraPosition,
+    });
+    scaleSpringAPI.start({
+      gridScale: 0,
+      starScale: system.star.radius,
+      config: {
+        tension: 200,
+      },
     });
     setTimeout(() => {
       camera.position.set(...initialCameraPosition);
       props.switchView("galaxy");
-    }, 600);
+    }, 400);
     // camera.position.set(...initialCameraPosition);
     // props.switchView("galaxy");
   };
@@ -83,14 +86,13 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
   useEffect(() => {
     console.log("MOUNT systemView");
 
-    if (true) {
-      pivotSpringAPI.start({
-        position: addArrays(system.position, [10, 0, 0]) as Array3,
-      });
-      transitionSpringAPI.start({
-        position: addArrays(system.position, [10, 8, 6]) as Array3,
-      });
-    }
+    transitionSpringAPI.start({
+      position: addArrays(system.position, [5, 12, 5]) as Array3,
+    });
+    scaleSpringAPI.start({
+      gridScale: 60,
+      starScale: 1 / system.star.radius,
+    });
 
     document.addEventListener("click", onLClick);
     document.addEventListener("contextmenu", onRClick);
@@ -102,35 +104,29 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
 
   return (
     <>
+      <MapControls
+        ref={controlsRef}
+        enabled={false}
+        enableRotate={false}
+        enableZoom={false}
+        target={system.position}
+      />
 
       {/* Similar to the star on the galaxy view, but higher quality */}
-      <mesh position={system.position}>
+      <animated.mesh position={system.position} scale={scaleSpring.starScale}>
         <icosahedronBufferGeometry args={[system.star.radius, 10]} />
         <meshBasicMaterial color={system.star.color} />
-      </mesh>
-
-      {/* Lighting setup */}
-      <ambientLight color={system.star.color} intensity={0.008} />
-      <directionalLight
-        position={[-200.0, 0, 0]}
-        color={"white"}
-        intensity={0.32}
-      />
-      <directionalLight
-        position={[-200.0, 0, 0]}
-        color={system.star.color}
-        intensity={0.4}
-      />
-      <directionalLight
-        position={[1, 0, 0.2]}
-        color="#322354"
-        intensity={0.2}
-      />
+      </animated.mesh>
 
       {/* Planets */}
       <group position={system.position}>
-        <axesHelper args={[10]}/>
-        {system.planets.map((planet, index) => (
+        <animated.gridHelper
+          ref={gridRef}
+          scale={scaleSpring.gridScale}
+          args={[1, 20, "#333", "#042f2c"]}
+        />
+        {/* <axesHelper args={[10]} /> */}
+        {/* {system.planets.map((planet, index) => (
           <Planet
           key={index}
             position={[
@@ -140,38 +136,8 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
             ]
             }
           />
-        ))}
+        ))} */}
       </group>
-
-      {/* Camera pivot indicator */}
-      <animated.mesh
-        position={pivotSpring.position}
-        ref={cameraPivotRef}
-        visible={false}
-      >
-        <boxBufferGeometry args={[0.3, 0.3, 0.3]} />
-        <meshBasicMaterial color={"#8fffff"} />
-      </animated.mesh>
-
-      {/* Background stars */}
-      <Instances
-        name="star systems instances"
-        limit={_GAME.GALAXY.genParams.starCount}
-      >
-        <icosahedronBufferGeometry args={[0.32, 2]} />
-        <meshBasicMaterial />
-        {_GAME.GALAXY.systems.map((system, index): JSX.Element => {
-          return (
-            <Fragment key={index}>
-              <Instance
-                position={system.position}
-                color={system.star.color}
-                scale={system.star.radius}
-              />
-            </Fragment>
-          );
-        })}
-      </Instances>
     </>
   );
 };

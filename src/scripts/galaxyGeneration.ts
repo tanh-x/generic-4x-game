@@ -157,7 +157,7 @@ for (let i = SYSTEMS.length; i < params.starCount; i++) {
   };
   // Behaves weirdly based on the default color, check later
   // star.color3 = new Color(star.color);
-  star.radius = 0.9 + Math.sqrt(star.mass) * 0.46;
+  star.radius = 0.5 + Math.sqrt(star.mass) * 0.31;
 
   let position: [x: number, y: number, z: number] = [0, 0, 0];
   // Generate XZ position, regenerate if manhattan distance < threshold

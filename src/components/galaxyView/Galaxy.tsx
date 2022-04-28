@@ -23,6 +23,7 @@ import { GamestateContext } from "_Main";
 
 import Stars from "./systems/Stars";
 import Paths from "./systems/Paths";
+import EnvFX from "components/EnvFX";
 
 const defaultCameraDirection = new THREE.Vector3(0, 3, 1).normalize();
 const deg = Math.PI / 180;
@@ -159,7 +160,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         minAzimuthAngle={-30 * deg}
         maxAzimuthAngle={30 * deg}
       />
-
+      <EnvFX />
       <Stars
         hitboxesRef={starsHitboxesRef}
         controlsRef={controlsRef}
