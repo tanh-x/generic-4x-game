@@ -38,6 +38,7 @@ export interface StarSystem {
   star: StellarBody;
   planets: Planet[];
   position: Array3;
+  sector: number;
 }
 
 export interface paramsProps {
@@ -50,12 +51,12 @@ export interface paramsProps {
 }
 
 export const params: paramsProps = {
-  radius: 270,
+  radius: 280,
   starCount: 100,
   distribution: "gaussian",
   maxEdgeLength: 72,
   maxEdgesPerNode: 4,
-  minDistance: 52,
+  minDistance: 48,
 };
 
 const SYSTEMS: StarSystem[] = [];
@@ -93,6 +94,7 @@ const generate2DPosition = (): [x: number, y: number, z: number] => {
 const getXZ = (index: number): [x: number, z: number] => {
   return [SYSTEMS[index].position[0], SYSTEMS[index].position[2]];
 };
+const tau = 2 * Math.PI;
 
 // const defaultColor3 = new Color("black");
 // Generating star systems
@@ -117,17 +119,30 @@ SYSTEMS.push({
     spectralClass: "blackhole",
     color: "#111",
     mass: 2_418_114,
-    radius: 4,
+    radius: 4.8,
     luminosity: 0,
   },
   planets: [],
   position: [0, 0, 0],
+  sector: 0,
 });
 // Place special systems
 
+// Pick n points that will radially split the galaxy into sectors
+const sectorsCount: number = 4;
+// const phaseAngle: number = randUniform(0, tau);
+const phaseAngle: number = Math.PI / 4;
+const angles: number[] = Array.from(
+  { length: sectorsCount },
+  (x, i) => (i * tau) / sectorsCount + phaseAngle
+);
+const bisectPoints: [number, number][] = angles.map((theta) => [
+  Math.cos(theta) * params.radius * 2,
+  Math.sin(theta) * params.radius * 2,
+]);
+
 // Generate the rest of the galaxy
-const remaining = params.starCount - SYSTEMS.length;
-for (let i = 0; i < remaining; i++) {
+for (let i = SYSTEMS.length; i < params.starCount; i++) {
   const _sc: SpectralType = spectralTypesList[weightedChoice(pWeightList)];
   const _data: SpectralClassProps = spectralClassesData[_sc];
 
@@ -142,23 +157,20 @@ for (let i = 0; i < remaining; i++) {
   };
   // Behaves weirdly based on the default color, check later
   // star.color3 = new Color(star.color);
-  star.radius = 0.73 + star.mass * 0.072;
+  star.radius = 0.6 + Math.sqrt(star.mass) * 0.64;
 
   let position: [x: number, y: number, z: number] = [0, 0, 0];
   // Generate XZ position, regenerate if manhattan distance < threshold
   const maxIters = 70;
   for (let iter = 0; iter < maxIters; iter++) {
-    if (iter === 49) {
-      console.log(i);
-    }
     let checkFailed = false;
     position = generate2DPosition();
     if (params.minDistance === undefined || SYSTEMS.length === 0) break;
     // The check will get less strict over many iterations
     const threshold = ((-0.7 / maxIters) * iter + 1.2) * params.minDistance;
-    for (let k = 0; k < SYSTEMS.length; k++) {
-      const dx = Math.abs(position[0] - SYSTEMS[k].position[0]);
-      const dz = Math.abs(position[2] - SYSTEMS[k].position[2]);
+    for (let e = 0; e < SYSTEMS.length; e++) {
+      const dx = Math.abs(position[0] - SYSTEMS[e].position[0]);
+      const dz = Math.abs(position[2] - SYSTEMS[e].position[2]);
       if (dx + dz < threshold) {
         checkFailed = true;
         break;
@@ -179,28 +191,29 @@ for (let i = 0; i < remaining; i++) {
     Math.sqrt(sumOfSquares(position)) / params.radius
   );
 
+  
+  const azimuth = Math.atan2(position[2], position[0])
+  const sector =
+    (
+      ((azimuth - phaseAngle + 2 * tau) % tau ) / tau * sectorsCount
+    );
+
   SYSTEMS.push({
     index: i,
     name,
     star,
     position,
     planets,
+    sector: ~~sector + 1,
   });
 }
-// Pick 2 points that will bisect the galaxy
-const bisectorAngle = randUniform(0, Math.PI);
-const bisectorA: [number, number] = [
-  params.radius * 2 * Math.cos(bisectorAngle),
-  params.radius * 2 * Math.sin(bisectorAngle) + 0.01,
-];
-const bisectorB: [number, number] = [-bisectorA[0], -bisectorA[1]];
-console.log(bisectorA, bisectorB);
 
 // Generating links between stars
-for (let i = 0; i < params.starCount; i++) {
+// Dont generate edges for the central blackhole (index 0)
+for (let i = 1; i < params.starCount; i++) {
   const [x, z] = getXZ(i);
 
-  for (let j = 0; j < params.starCount; j++) {
+  for (let j = 1; j < params.starCount; j++) {
     // Stop the loop if it already have enough edges
     if (systemsAdjList[i].length >= params.maxEdgesPerNode) {
       break;
@@ -210,7 +223,8 @@ for (let i = 0; i < params.starCount; i++) {
     if (
       j === i || // if it is itself
       systemsAdjList[j].length >= params.maxEdgesPerNode || // if the destination has enough edges
-      systemsAdjList[i].includes(j) // if theyre already linked
+      systemsAdjList[i].includes(j) || // if theyre already linked
+      SYSTEMS[i].sector !== SYSTEMS[j].sector 
     ) {
       continue;
     }
@@ -221,22 +235,26 @@ for (let i = 0; i < params.starCount; i++) {
     if (
       dist <= params.maxEdgeLength &&
       // Probability as a function of distance and max length
-      // Math.random() < 0.85
-      (i !== 0 || Math.random() < (0.5 * params.maxEdgeLength) / (dist + 0.5))
+      // Math.random() < (0.5 * params.maxEdgeLength) / (dist + 0.5)
+      true
     ) {
       let hasCollision = false;
-      for (let k = 0; k < systemsEdgeList.length; k++) {
-        const p1 = systemsEdgeList[k][0];
-        const p2 = systemsEdgeList[k][1];
+      // Coordinates of 2 systems were trying to link
+      const s1: [number, number] = [x, z];
+      const s2 = getXZ(j);
+      for (let e = 0; e < systemsEdgeList.length; e++) {
+        // Coordinates of 2 vertices of an existing edge
+        const p1 = getXZ(systemsEdgeList[e][0]);
+        const p2 = getXZ(systemsEdgeList[e][1]);
+
         if (
-          intersectingEdges(getXZ(i), getXZ(j), getXZ(p1), getXZ(p2)) ||
-          (i !== 0 &&
-            intersectingEdges(getXZ(i), getXZ(j), bisectorA, bisectorB))
+          intersectingEdges(s1, s2, p1, p2)
         ) {
           hasCollision = true;
           break;
         }
       }
+
       if (!hasCollision) {
         createEdge(i, j);
       }

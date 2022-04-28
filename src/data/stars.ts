@@ -36,7 +36,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     symbol: "O",
     pWeight: 5,
     color: ["#C8C0FF", "#B4B1FF", "#B2B2FF", "#B3A6FF"],
-    massRange: [12, 25],
+    massRange: [8, 16],
     luminosity: 200,
   },
   bluewhite: {
@@ -44,7 +44,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     symbol: "B",
     pWeight: 10,
     color: ["#A3C5FF", "#B2E1FF", "#B5DAFF", "#B4F1FF"],
-    massRange: [5.5, 12],
+    massRange: [4.5, 8],
     luminosity: 120,
   },
   white: {
@@ -52,7 +52,7 @@ export const spectralClassesData: Record<SpectralType, SpectralClassProps> = {
     symbol: "A",
     pWeight: 6,
     color: ["#DDDDFF", "#DDDDFF", "#F0F1FF", "#D2D5FF"],
-    massRange: [2.8, 5.5],
+    massRange: [2.8, 4.5],
     luminosity: 70,
   },
   yellowwhite: {

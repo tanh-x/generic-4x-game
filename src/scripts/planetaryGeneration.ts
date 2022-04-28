@@ -15,15 +15,6 @@ import {
   planetTypesData,
 } from "data/planets";
 
-const normaliseDensityIntegral = 1.0 / Math.sqrt(2.0 * Math.PI);
-const normalPD = (x: number, mu: number, sigma: number): number => {
-  return (
-    (1.0 / sigma) *
-    normaliseDensityIntegral *
-    Math.exp(-0.5 * ((x - mu) / sigma) ** 2)
-  );
-};
-
 export interface Planet {
   type: PlanetType;
   stats: {
@@ -49,33 +40,34 @@ export const generatePlanetarySystem = (
 ): Planet[] => {
   const generated: Planet[] = [];
   for (let d = 0; d < 12; d += 0.4) {
-    if (generated.length === 6 || Math.random() > 1.0 - d * 0.05) {
+    if (generated.length === 5 || Math.random() > 1.0 - d * 0.05) {
       break;
     }
-    if (Math.random() > 0.6) {
+    if (Math.random() > 0.4) {
       continue;
     }
 
     const radiationFlux: number = Math.min(
       (Math.sqrt(starLuminosity) * 1.8) / (d + 1),
-      8.5
+      6.5
     );
     const temperature: number = clamp(
-      radiationFlux + randNormal(0, 1.1, 3.0),
+      radiationFlux + randNormal(-0.4, 1.3, 3.0),
       0,
       8
     );
     // TODO: Category as a function of distance and mass
-    const planetCategory: PlanetCategory = randChoose([
-      ...planetCategoriesList,
-    ]);
+    // const planetCategory: PlanetCategory = ;
 
     const candidateTypes: PlanetType[] = (
       Object.keys(planetTypesData) as PlanetType[]
     ).filter(
       (key) =>
         inRange(temperature, planetTypesData[key].temperatureRange) &&
-        planetTypesData[key].category === planetCategory
+        (planetTypesData[key].category ===
+          randChoose([...planetCategoriesList]) ||
+          planetTypesData[key].category ===
+            randChoose([...planetCategoriesList]))
     );
     if (candidateTypes.length === 0) {
       continue;

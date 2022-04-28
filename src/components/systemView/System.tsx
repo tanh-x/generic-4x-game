@@ -4,14 +4,15 @@ import {
   useContext,
   MutableRefObject,
   FunctionComponent,
+  Fragment,
 } from "react";
 import { useThree } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { Instances, Instance } from "@react-three/drei";
 import { useSpring, animated } from "@react-spring/three";
 
 import { GamestateContext } from "_Main";
-import {} from "scripts/planetaryGeneration";
 import { Array3, addArrays } from "_helpers";
+import Planet from "./Planet";
 
 interface SystemProps {
   switchView: Function;
@@ -82,15 +83,12 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
   useEffect(() => {
     console.log("MOUNT systemView");
 
-    // Point the camera at where the star used to be
-    camera.lookAt(...system.position);
-
     if (true) {
       pivotSpringAPI.start({
-        position: addArrays(system.position, [0, -3.6, 0]) as Array3,
+        position: addArrays(system.position, [0, -4.6, 0]) as Array3,
       });
       transitionSpringAPI.start({
-        position: addArrays(system.position, [0, -4.6, 7.0]) as Array3,
+        position: addArrays(system.position, [0, -5.0, 7.0]) as Array3,
       });
     }
 
@@ -104,7 +102,45 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
 
   return (
     <>
-      {/* <OrbitControls ref={controlsRef} enabled={false} /> */}
+      {/* Similar to the star on the galaxy view, but higher quality */}
+      <mesh position={system.position}>
+        <icosahedronBufferGeometry args={[system.star.radius, 10]} />
+        <meshBasicMaterial color={system.star.color} />
+      </mesh>
+
+      {/* Lighting setup */}
+      <ambientLight color={system.star.color} intensity={0.008} />
+      <directionalLight
+        position={[0, 2.0, 2.0]}
+        color={"white"}
+        intensity={0.32}
+      />
+      <directionalLight
+        position={[0, 2.0, 2.0]}
+        color={system.star.color}
+        intensity={0.4}
+      />
+      <directionalLight
+        position={[0, -1, 0.2]}
+        color="#322354"
+        intensity={0.2}
+      />
+
+      {/* Planets */}
+      <group position={system.position}>
+        {system.planets.map((planet, index) => (
+          <Planet
+            key={index}
+            position={[
+              4 * ((index / (system.planets.length - 1)) - 0.5),
+              -4.3,
+              2.5]
+            }
+          />
+        ))}
+      </group>
+
+      {/* Camera pivot indicator */}
       <animated.mesh
         position={pivotSpring.position}
         ref={cameraPivotRef}
@@ -114,12 +150,25 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
         <meshBasicMaterial color={"#8fffff"} />
       </animated.mesh>
 
-      {/* Similar to the star on the galaxy view, but higher quality */}
-      <mesh position={system.position}>
-        <icosahedronBufferGeometry args={[system.star.radius, 10]} />
-        <meshBasicMaterial color={system.star.color} />
-      </mesh>
-      <group position={system.position}></group>
+      {/* Background stars */}
+      <Instances
+        name="star systems instances"
+        limit={_GAME.GALAXY.genParams.starCount}
+      >
+        <icosahedronBufferGeometry args={[0.32, 2]} />
+        <meshBasicMaterial />
+        {_GAME.GALAXY.systems.map((system, index): JSX.Element => {
+          return (
+            <Fragment key={index}>
+              <Instance
+                position={system.position}
+                color={system.star.color}
+                scale={system.star.radius}
+              />
+            </Fragment>
+          );
+        })}
+      </Instances>
     </>
   );
 };

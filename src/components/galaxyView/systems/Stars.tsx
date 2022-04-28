@@ -71,9 +71,10 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
       </Instances>
 
       {/* Concentric circles around stars */}
-      <SystemOrbitsFX innerRadius={3.1} outerRadius={3.2} color="#2f2f35" />
-      <SystemOrbitsFX innerRadius={3.9} outerRadius={4.0} color="#40454c" />
-      <SystemOrbitsFX innerRadius={4.7} outerRadius={4.8} />
+      {/* <SystemOrbitsFX innerRadius={2.6} outerRadius={2.7} color="#2f2f35" /> */}
+      <SystemOrbitsFX innerRadius={3.4} outerRadius={3.5} color="#2f3237" />
+      <SystemOrbitsFX innerRadius={4.2} outerRadius={4.3} color="#40454c" />
+      <SystemOrbitsFX innerRadius={4.9} outerRadius={5.0} />
 
       {/* Hitboxes for click to focus */}
       <Instances
@@ -82,7 +83,7 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
         limit={_GAME.GALAXY.genParams.starCount}
         visible={false}
       >
-        <boxBufferGeometry args={[8.5, 8.5, 5]} />
+        <boxBufferGeometry args={[7.5, 7.5, 5]} />
         <meshBasicMaterial wireframe={true} />
         {_GAME.GALAXY.systems.map((system: StarSystem, index: number) => {
           return (

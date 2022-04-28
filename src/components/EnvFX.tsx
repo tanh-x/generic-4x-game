@@ -11,9 +11,9 @@ const EnvFX: FunctionComponent<{}> = () => {
       /> */}
 
       <Stars
-        radius={-250}
+        radius={-200}
         depth={400}
-        count={1000}
+        count={2000}
         factor={1.5}
         saturation={0}
         fade={true}

@@ -126,7 +126,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
     controlsUpdateFn.current = controlsRef.current.update.bind({});
     if (props.focusedIndexRef.current === undefined) {
       // Should be on initial render
-      camera.position.copy(defaultCameraDirection.clone().multiplyScalar(139));
+      camera.position.copy(defaultCameraDirection.clone().multiplyScalar(150));
       camera.lookAt(0, 0, 0);
     } else {
       // Should be on switching from another view
@@ -154,7 +154,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         panSpeed={0.8}
         minDistance={10}
         zoomSpeed={2}
-        maxDistance={_GAME.GALAXY.genParams.radius * 3}
+        maxDistance={_GAME.GALAXY.genParams.radius * 2.5}
         maxPolarAngle={50 * deg}
         minAzimuthAngle={-30 * deg}
         maxAzimuthAngle={30 * deg}
