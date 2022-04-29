@@ -28,7 +28,7 @@ interface GalaxyProps {
 }
 
 const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
-  console.log("RENDER galaxyView");
+  // console.log("RENDER galaxyView");
 
   const { gl, raycaster, scene, mouse, camera } = useThree();
   const _GAME = useContext(GamestateContext);
@@ -121,7 +121,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
   };
 
   useEffect(() => {
-    console.log("MOUNT galaxyView");
+    // console.log("MOUNT galaxyView");
 
     controlsUpdateFn.current = controlsRef.current.update.bind({});
     ballControlsUpdateFn.current = ballControlsRef.current.update.bind({});
@@ -158,13 +158,14 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         // enableRotate={false}
         enableZoom={false}
         dampingFactor={0.15}
+        rotateSpeed={0.4}
         panSpeed={0.8}
         minDistance={20}
         zoomSpeed={2}
         maxDistance={_GAME.GALAXY.genParams.radius * 2.5}
-        maxPolarAngle={50 * deg}
-        minAzimuthAngle={-30 * deg}
-        maxAzimuthAngle={30 * deg}
+        // maxPolarAngle={50 * deg}
+        // minAzimuthAngle={-30 * deg}
+        // maxAzimuthAngle={30 * deg}
       />
       <TrackballControls
         ref={ballControlsRef}

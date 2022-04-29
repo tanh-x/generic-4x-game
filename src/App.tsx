@@ -32,7 +32,11 @@ const App: FunctionComponent<any> = () => {
 
   return (
     <div className="">
-      <Canvas camera={{ fov: 50, near: 0.05, far: 3000 }} gl={{ alpha: false, toneMapping: NoToneMapping }}>
+      <Canvas
+        camera={{ fov: 50, near: 0.05, far: 3000 }}
+        // linear
+        gl={{ alpha: false, toneMapping: NoToneMapping }}
+      >
         <Suspense fallback={null}>
           <Main />
         </Suspense>

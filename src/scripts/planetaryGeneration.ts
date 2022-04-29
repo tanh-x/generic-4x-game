@@ -102,7 +102,7 @@ export const generatePlanetarySystem = (
 
     const orbitalParameters = {
       semiMajorAxis: 0.8 * generated.length ** 1.42 + randUniform(1.3, 1.6),
-      eccentricity: Math.abs(randUniform(-0.25, 0.25)),
+      eccentricity: randUniform(0, 0.16),
       inclination: randNormal(0, generated.length * 4 + 3, 25) * deg,
       argumentPeriapsis: randUniform(0, 2 * Math.PI),
       longitudeAscNode: randNormal(0, generated.length * 2, 30) * deg,

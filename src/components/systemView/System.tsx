@@ -61,6 +61,7 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
         if (controlsRef.current === null) return;
         controlsRef.current.enabled = true;
         controlsRef.current.maxDistance = 30;
+        ballControlsRef.current.enabled = true;
       },
     };
   });
@@ -86,7 +87,7 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
     });
     scaleSpringAPI.start({
       gridScale: 1 / 50,
-      gridPosition: [0, -60, 0],
+      gridPosition: [0, -30, 0],
       starScale: 1,
       config: {
         tension: 200,
@@ -95,14 +96,13 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
     setTimeout(() => {
       camera.position.set(...initialCameraPosition);
       props.switchView("galaxy");
-    }, 400);
+    }, 500);
     // camera.position.set(...initialCameraPosition);
     // props.switchView("galaxy");
   };
 
   useEffect(() => {
-    console.log("MOUNT systemView");
-    console.log(camera.position);
+    // console.log("MOUNT systemView");
 
     transitionSpringAPI.start({
       position: addArrays(system.position, [5.7, 7, 5.7]) as Array3,
@@ -129,14 +129,15 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
     <>
       <OrbitControls
         ref={controlsRef}
-        // enabled={false}
+        enabled={false}
         // enableRotate={false}
         enablePan={false}
         enableZoom={false}
         target={system.position}
+        rotateSpeed={0.5}
         maxPolarAngle={Math.PI / 3}
         minDistance={3}
-        dampingFactor={0.2}
+        dampingFactor={0.14}
         autoRotate
         autoRotateSpeed={0.4}
         // maxDistance={30}
