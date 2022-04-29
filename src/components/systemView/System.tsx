@@ -6,13 +6,14 @@ import {
   FunctionComponent,
   Fragment,
 } from "react";
-import { useThree } from "@react-three/fiber";
-import { Instances, Instance, MapControls } from "@react-three/drei";
+import { useThree, useFrame } from "@react-three/fiber";
+import { Line, OrbitControls, TrackballControls } from "@react-three/drei";
 import { useSpring, animated } from "@react-spring/three";
-
+import { Color } from "three";
 import { GamestateContext } from "_Main";
-import { Array3, addArrays } from "_helpers";
+import { Array3, addArrays, randChoose } from "_helpers";
 import Planet from "./Planet";
+import { keplerianOrbit } from "scripts/keplerianOrbit";
 
 interface SystemProps {
   switchView: Function;
@@ -24,15 +25,28 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
   const { camera } = useThree();
   const _GAME = useContext(GamestateContext);
   const controlsRef = useRef<any>();
+  const ballControlsRef = useRef<any>();
   const gridRef = useRef<any>();
   const system = _GAME.GALAXY.systems[props.focusedIndexRef.current!];
+  const orbitTrails =
+    system.planets.length !== 0
+      ? system.planets[0].misc.orbitPoints.map(
+          (x, i) =>
+            new Color(
+              `hsl(0, 0%, ${Math.round(
+                20 + (i * 60) / system.planets[0].misc.orbitPoints.length
+              )}%)`
+            )
+        )
+      : undefined;
+
   // Camera position before zooming into the system, will revert back after exiting
   const initialCameraPosition = camera.position.toArray();
   const [transitionSpring, transitionSpringAPI] = useSpring(() => {
     return {
       position: initialCameraPosition,
       config: {
-        tension: 160,
+        tension: 120,
         precision: 0.008,
       },
       onChange: (): void => {
@@ -46,17 +60,19 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
       onRest: (): void => {
         if (controlsRef.current === null) return;
         controlsRef.current.enabled = true;
+        controlsRef.current.maxDistance = 30;
       },
     };
   });
   const [scaleSpring, scaleSpringAPI] = useSpring(() => {
     return {
       from: {
-        gridScale: 3,
-        starScale: system.star.radius,
+        gridScale: 1 / 50,
+        gridPosition: [0, -60, 0] as Array3,
+        starScale: 1,
       },
       config: {
-        tension: 75,
+        tension: 160,
         precision: 0.008,
       },
     };
@@ -69,8 +85,9 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
       position: initialCameraPosition,
     });
     scaleSpringAPI.start({
-      gridScale: 0,
-      starScale: system.star.radius,
+      gridScale: 1 / 50,
+      gridPosition: [0, -60, 0],
+      starScale: 1,
       config: {
         tension: 200,
       },
@@ -85,13 +102,15 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
 
   useEffect(() => {
     console.log("MOUNT systemView");
+    console.log(camera.position);
 
     transitionSpringAPI.start({
-      position: addArrays(system.position, [5, 12, 5]) as Array3,
+      position: addArrays(system.position, [5.7, 7, 5.7]) as Array3,
     });
     scaleSpringAPI.start({
-      gridScale: 60,
-      starScale: 1 / system.star.radius,
+      gridScale: 1,
+      gridPosition: [0, 0, 0],
+      starScale: 0.25,
     });
 
     document.addEventListener("click", onLClick);
@@ -102,42 +121,74 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
     };
   }, []);
 
+  useFrame(() => {
+    ballControlsRef.current.target = controlsRef.current.target;
+  });
+
   return (
     <>
-      <MapControls
+      <OrbitControls
         ref={controlsRef}
-        enabled={false}
-        enableRotate={false}
+        // enabled={false}
+        // enableRotate={false}
+        enablePan={false}
         enableZoom={false}
         target={system.position}
+        maxPolarAngle={Math.PI / 3}
+        minDistance={3}
+        dampingFactor={0.2}
+        autoRotate
+        autoRotateSpeed={0.4}
+        // maxDistance={30}
+      />
+      <TrackballControls
+        ref={ballControlsRef}
+        // enabled={false}
+        noRotate={true}
+        noPan={true}
+        noZoom={false}
+        zoomSpeed={0.8}
+        dynamicDampingFactor={0.15}
       />
 
       {/* Similar to the star on the galaxy view, but higher quality */}
       <animated.mesh position={system.position} scale={scaleSpring.starScale}>
         <icosahedronBufferGeometry args={[system.star.radius, 10]} />
         <meshBasicMaterial color={system.star.color} />
+        {/* <directionalLight /> */}
       </animated.mesh>
 
       {/* Planets */}
-      <group position={system.position}>
+      <animated.group position={system.position} scale={scaleSpring.gridScale}>
+        <rectAreaLight
+          position={[10, 0, 0]}
+          intensity={100}
+          width={10}
+          height={10}
+          color={0xffffff}
+        />
+        <ambientLight intensity={0.1} color={0xffffff} />
+        <pointLight position={[0, 0, 0]} intensity={5} color={0xffffff} />
         <animated.gridHelper
+          position={scaleSpring.gridPosition}
           ref={gridRef}
-          scale={scaleSpring.gridScale}
-          args={[1, 20, "#333", "#042f2c"]}
+          args={[50, 40, "#1c1c1f", "#071520"]}
         />
         {/* <axesHelper args={[10]} /> */}
-        {/* {system.planets.map((planet, index) => (
-          <Planet
-          key={index}
-            position={[
-              10 + 10 * ((index / (system.planets.length - 1)) - 0.5),
-              0,
-              0,  
-            ]
-            }
-          />
-        ))} */}
-      </group>
+        {system.planets.map((planet, index) => (
+          <Fragment key={index}>
+            <Planet position={planet.misc.orbitPoints[0]} />
+            <Line
+              points={planet.misc.orbitPoints}
+              alphaWrite
+              // color="#54616a"
+              color="#6a6458"
+              vertexColors={orbitTrails as Color[] & true}
+              linewidth={0.4}
+            />
+          </Fragment>
+        ))}
+      </animated.group>
     </>
   );
 };

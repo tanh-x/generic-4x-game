@@ -9,13 +9,7 @@ import {
   Fragment,
 } from "react";
 import { useThree, useFrame } from "@react-three/fiber";
-import {
-  Instances,
-  Instance,
-  Line,
-  PerspectiveCamera,
-  MapControls,
-} from "@react-three/drei";
+import { MapControls, TrackballControls } from "@react-three/drei";
 import { useSpring, animated } from "@react-spring/three";
 
 import { Array3, addArrays } from "_helpers";
@@ -39,7 +33,9 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
   const { gl, raycaster, scene, mouse, camera } = useThree();
   const _GAME = useContext(GamestateContext);
   const controlsRef = useRef<any>();
+  const ballControlsRef = useRef<any>();
   const controlsUpdateFn = useRef((): void => {});
+  const ballControlsUpdateFn = useRef((): void => {});
   const starsHitboxesRef = useRef<any>();
 
   const [spring, api] = useSpring(() => {
@@ -63,11 +59,15 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         // organs and central nervous system when the animation starts
         controlsRef.current.enabled = false;
         controlsRef.current.update = (): void => {};
+        ballControlsRef.current.enabled = false;
+        ballControlsRef.current.update = (): void => {};
       },
       onRest: () => {
         // Restore life functions to the controls
         controlsRef.current.update = controlsUpdateFn.current;
         controlsRef.current.enabled = true;
+        ballControlsRef.current.update = ballControlsUpdateFn.current;
+        ballControlsRef.current.enabled = true;
       },
     };
   });
@@ -86,14 +86,14 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
 
   const onLClick = (): void => {
     if (spring.position.isAnimating) return;
-    
+
     const selectedIndex = raycastStars();
     if (selectedIndex === undefined) {
       props.focusedIndexRef.current = undefined;
       return;
     }
     console.log(_GAME.GALAXY.systems[selectedIndex]);
-    
+
     if (props.focusedIndexRef.current === selectedIndex) {
       props.switchView("system");
     } else {
@@ -111,10 +111,9 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
       to: addArrays(
         focusedSystemPosition,
         camera.position
-          .clone() // Dont mutate the camera vector
+          .clone()
           .sub(controlsRef.current.target) // Get directional vector of camera
-          .normalize()
-          .multiplyScalar(100) // Zoom in
+          .setLength(100) // Zoom in/out to 100 units away from the star
           .toArray()
       ) as Array3,
     });
@@ -125,14 +124,17 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
     console.log("MOUNT galaxyView");
 
     controlsUpdateFn.current = controlsRef.current.update.bind({});
+    ballControlsUpdateFn.current = ballControlsRef.current.update.bind({});
     if (props.focusedIndexRef.current === undefined) {
       // Should be on initial render
       camera.position.copy(defaultCameraDirection.clone().multiplyScalar(150));
       camera.lookAt(0, 0, 0);
     } else {
       // Should be on switching from another view
-      const focusedPosition = _GAME.GALAXY.systems[props.focusedIndexRef.current].position
+      const focusedPosition =
+        _GAME.GALAXY.systems[props.focusedIndexRef.current].position;
       controlsRef.current.target.set(...focusedPosition);
+      ballControlsRef.current.target.set(...focusedPosition);
       camera.lookAt(...focusedPosition);
     }
 
@@ -145,22 +147,35 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
     };
   }, []);
 
-  useFrame((): void => {});
+  useFrame((): void => {
+    ballControlsRef.current.target = controlsRef.current.target;
+  });
+
   return (
     <>
       <MapControls
         ref={controlsRef}
         // enableRotate={false}
+        enableZoom={false}
         dampingFactor={0.15}
         panSpeed={0.8}
-        minDistance={10}
+        minDistance={20}
         zoomSpeed={2}
         maxDistance={_GAME.GALAXY.genParams.radius * 2.5}
         maxPolarAngle={50 * deg}
         minAzimuthAngle={-30 * deg}
         maxAzimuthAngle={30 * deg}
       />
-      <EnvFX />
+      <TrackballControls
+        ref={ballControlsRef}
+        // enabled={false}
+        noRotate={true}
+        noPan={true}
+        noZoom={false}
+        zoomSpeed={1.5}
+        dynamicDampingFactor={0.15}
+      />
+
       <Stars
         hitboxesRef={starsHitboxesRef}
         controlsRef={controlsRef}

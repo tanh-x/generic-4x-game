@@ -1,9 +1,11 @@
 import {
   randChoose,
+  randUniform,
   randNormal,
   weightedChoice,
   clamp,
   inRange,
+  Array3,
 } from "_helpers";
 
 import {
@@ -14,6 +16,8 @@ import {
   PlanetProps,
   planetTypesData,
 } from "data/planets";
+
+import { keplerianOrbit } from "scripts/keplerianOrbit";
 
 export interface Planet {
   type: PlanetType;
@@ -30,9 +34,15 @@ export interface Planet {
   };
   misc: {
     temperature: number;
+    orbitPoints: Array3[];
   };
 }
-
+const deg = Math.PI / 180;
+const orbitLineCount = 128;
+const orbitThetas = Array.from(
+  { length: orbitLineCount + 1 },
+  (x, i) => (i / orbitLineCount) * Math.PI * 2
+);
 export const generatePlanetarySystem = (
   starLuminosity: number,
   starMass: number,
@@ -90,8 +100,24 @@ export const generatePlanetarySystem = (
       APRV: _data.habitationLevel - 3,
     };
 
+    const orbitalParameters = {
+      semiMajorAxis: 0.8 * generated.length ** 1.42 + randUniform(1.3, 1.6),
+      eccentricity: Math.abs(randUniform(-0.25, 0.25)),
+      inclination: randNormal(0, generated.length * 4 + 3, 25) * deg,
+      argumentPeriapsis: randUniform(0, 2 * Math.PI),
+      longitudeAscNode: randNormal(0, generated.length * 2, 30) * deg,
+    };
+
     const misc: Planet["misc"] = {
       temperature: temperature,
+      orbitPoints: orbitThetas.map((theta) =>
+        keplerianOrbit({
+          method: "anomaly",
+          t: theta,
+          GM: 1,
+          ...orbitalParameters,
+        })
+      ),
     };
 
     // Append new planet onto array

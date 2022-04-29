@@ -70,6 +70,7 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
 
       {enablePP && (
         <>
+          <EnvFX />
           <EffectComposer>
             <Bloom luminanceThreshold={0.07} kernelSize={4} height={1024} />
           </EffectComposer>

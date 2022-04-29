@@ -10,6 +10,7 @@ import { useThree, useFrame } from "@react-three/fiber";
 import { Instance, Instances, useTexture } from "@react-three/drei";
 
 import { GamestateContext } from "_Main";
+import StarMesh from "components/galaxyView/systems/StarMesh";
 import SystemOrbitsFX from "./SystemOrbitsFX";
 import StarLabels from "./StarLabels";
 import { StarSystem } from "scripts/galaxyGeneration";
@@ -57,12 +58,10 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
           (system: StarSystem, index: number): JSX.Element => {
             return (
               <Fragment key={index}>
-                <Instance
-                  name={`star${index}`}
+                <StarMesh 
                   position={system.position}
                   color={system.star.color}
                   scale={system.star.radius}
-                  matrixAutoUpdate={false}
                 />
               </Fragment>
             );

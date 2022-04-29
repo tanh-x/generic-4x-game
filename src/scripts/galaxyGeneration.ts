@@ -51,12 +51,12 @@ export interface paramsProps {
 }
 
 export const params: paramsProps = {
-  radius: 285,
+  radius: 300,
   starCount: 100,
   distribution: "gaussian",
   maxEdgeLength: 72,
   maxEdgesPerNode: 4,
-  minDistance: 48,
+  minDistance: 56,
 };
 
 const SYSTEMS: StarSystem[] = [];
@@ -83,9 +83,9 @@ const generate2DPosition = (): [x: number, y: number, z: number] => {
     ];
   } else if (params.distribution === "gaussian") {
     return [
-      randNormal(0, params.radius * 0.4, 1.1 * params.radius),
+      randNormal(0, params.radius * 0.4, params.radius),
       0,
-      randNormal(0, params.radius * 0.4, 1.1 * params.radius),
+      randNormal(0, params.radius * 0.4, params.radius),
     ];
   }
   return [0, -20, 0];
@@ -117,7 +117,7 @@ SYSTEMS.push({
   ]),
   star: {
     spectralClass: "blackhole",
-    color: "#111",
+    color: "#231a2d",
     mass: 2_418_114,
     radius: 4.8,
     luminosity: 0,
