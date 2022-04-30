@@ -1,33 +1,27 @@
 import { useEffect, FunctionComponent } from "react";
-import { Environment, useTexture, useCubeTexture, Stars } from "@react-three/drei";
+import { useLoader } from "@react-three/fiber";
+import {
+  Environment,
+  useTexture,
+  useCubeTexture,
+  Stars,
+} from "@react-three/drei";
 
 const EnvFX: FunctionComponent<{}> = () => {
-  const skybox = useTexture({
-    px: "assets/px.png",
-    nx: "assets/nx.png",
-    py: "assets/py.png",
-    ny: "assets/ny.png",
-    pz: "assets/pz.png",
-    nz: "assets/nz.png",
-  })
-  const cubemap = useCubeTexture([
-    "px.png",
-    "nx.png",
-    "py.png",
-    "ny.png",
-    "pz.png",
-    "nz.png",
-  ], { path: "assets/"} );
-
+  const cubemap = useCubeTexture(
+    ["px.jpg", "nx.jpg", "py.jpg", "ny.jpg", "pz.jpg", "nz.jpg"],
+    { path: "assets/skybox/" }
+  );
+  cubemap.encoding = 3001; // sRGB encoding
+  
   useEffect((): void => {
-    console.log(skybox)
-  }, [])
+
+  }, []);
 
   return (
     <>
       <Environment
         background={"only"}
-        // files={["px.png", "nx.png", "py.png", "ny.png", "pz.png", "nz.png"]}
         path={"assets/"}
         map={cubemap}
       />
@@ -39,7 +33,6 @@ const EnvFX: FunctionComponent<{}> = () => {
         factor={1.5}
         saturation={0}
         fade={true}
-        
       />
     </>
   );

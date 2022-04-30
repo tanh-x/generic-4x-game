@@ -17,7 +17,7 @@ const Paths: FunctionComponent<EdgesProps> = (props): JSX.Element => {
 
   return (
     <>
-      <Segments ref={segmentsRef} limit={props.edgeList.length} lineWidth={0.6}>
+      <Segments ref={segmentsRef} limit={props.edgeList.length} lineWidth={0.75}>
         {props.edgeList.map((edge, index) => {
           const positionA = new Vector3(...props.systems[edge[0]].position);
           const positionB = new Vector3(...props.systems[edge[1]].position);
@@ -40,8 +40,8 @@ const Paths: FunctionComponent<EdgesProps> = (props): JSX.Element => {
                       .lerp(positionB, 0.5)
                       .distanceTo(new Vector3(0, 0, 0)) **
                       1.84,
-                  0.05,
-                  0.7
+                  0.1,
+                  1.0
                 )
               )}
             />

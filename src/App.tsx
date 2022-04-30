@@ -33,7 +33,7 @@ const App: FunctionComponent<any> = () => {
   return (
     <div className="">
       <Canvas
-        camera={{ fov: 50, near: 0.05, far: 3000 }}
+        camera={{ fov: 50, near: 0.1, far: 1000 }}
         // linear
         gl={{ alpha: false, toneMapping: NoToneMapping }}
       >
