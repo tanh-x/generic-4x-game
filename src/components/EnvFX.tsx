@@ -30,7 +30,7 @@ const EnvFX: FunctionComponent<{}> = () => {
         radius={-197}
         depth={400}
         count={2000}
-        factor={1.5}
+        factor={2}
         saturation={0}
         fade={true}
       />

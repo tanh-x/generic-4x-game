@@ -34,14 +34,14 @@ const Paths: FunctionComponent<EdgesProps> = (props): JSX.Element => {
               end={positionB.add(dirVector)}
               color={new Color("#fff").multiplyScalar(
                 clamp(
-                  1000 /
+                  1200 /
                     positionA
                       .clone()
                       .lerp(positionB, 0.5)
-                      .distanceTo(new Vector3(0, 0, 0)) **
-                      1.84,
-                  0.1,
-                  1.0
+                      .distanceTo(new Vector3(100, 0, 100)) **
+                      1.74,
+                  0.2,
+                  2.0
                 )
               )}
             />

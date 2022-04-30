@@ -71,8 +71,8 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
 
       {/* Concentric circles around stars */}
       {/* <SystemOrbitsFX innerRadius={2.6} outerRadius={2.7} color="#2f2f35" /> */}
-      <SystemOrbitsFX innerRadius={3.4} outerRadius={3.5} color="#2f3237" />
-      <SystemOrbitsFX innerRadius={4.2} outerRadius={4.3} color="#40454c" />
+      <SystemOrbitsFX innerRadius={3.4} outerRadius={3.5} color="#3f4247" />
+      <SystemOrbitsFX innerRadius={4.2} outerRadius={4.3} color="#50555c" />
       <SystemOrbitsFX innerRadius={4.9} outerRadius={5.0} />
 
       {/* Hitboxes for click to focus */}

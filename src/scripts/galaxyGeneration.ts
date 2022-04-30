@@ -123,15 +123,14 @@ SYSTEMS.push({
     luminosity: 0,
   },
   planets: [],
-  position: [0, 5, 0],
+  position: [0, 0, 0],
   sector: 0,
 });
 // Place special systems
 
 // Pick n points that will radially split the galaxy into sectors
 const sectorsCount: number = 4;
-// const phaseAngle: number = randUniform(0, tau);
-const phaseAngle: number = Math.PI / 4;
+const phaseAngle: number = randUniform(0, tau);
 const angles: number[] = Array.from(
   { length: sectorsCount },
   (x, i) => (i * tau) / sectorsCount + phaseAngle

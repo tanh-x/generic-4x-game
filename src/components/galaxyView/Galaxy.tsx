@@ -17,8 +17,6 @@ import { GamestateContext } from "_Main";
 
 import Stars from "./systems/Stars";
 import Paths from "./systems/Paths";
-import EnvFX from "components/EnvFX";
-import GalaxyMesh from "./GalaxyMesh";
 
 const defaultCameraDirection = new THREE.Vector3(0, 3, 1).normalize();
 const deg = Math.PI / 180;
@@ -160,7 +158,6 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         focusOnSystem={focusOnSystem}
       />
       <Paths systems={_GAME.GALAXY.systems} edgeList={_GAME.GALAXY.edgeList} />
-      <GalaxyMesh diameter={_GAME.GALAXY.genParams.radius * 2}/>
 
       <MapControls
         ref={controlsRef}
@@ -172,9 +169,9 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         minDistance={20}
         zoomSpeed={2}
         maxDistance={_GAME.GALAXY.genParams.radius * 2.5}
-        // maxPolarAngle={50 * deg}
-        // minAzimuthAngle={-30 * deg}
-        // maxAzimuthAngle={30 * deg}
+        maxPolarAngle={50 * deg}
+        minAzimuthAngle={-30 * deg}
+        maxAzimuthAngle={30 * deg}
       />
       <TrackballControls
         ref={ballControlsRef}

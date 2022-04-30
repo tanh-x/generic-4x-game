@@ -38,7 +38,7 @@ const SystemOrbitsFX: FunctionComponent<SystemOrbitsFXProps> = (props): JSX.Elem
             key={index}
             position={system.position}
             rotation={rotatePlaneFaceUp}
-            color={props.color ?? new Color(system.star.color).multiplyScalar(0.3)}
+            color={props.color ?? new Color(system.star.color).multiplyScalar(0.47)}
             matrixAutoUpdate={false}
           />
         );

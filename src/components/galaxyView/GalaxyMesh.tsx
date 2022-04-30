@@ -1,28 +1,24 @@
-import { useEffect, useRef, FunctionComponent } from "react";
+import { useEffect, useRef, useContext, FunctionComponent } from "react";
 import { useTexture } from "@react-three/drei";
 import { sRGBEncoding, LinearEncoding } from "three";
 
 import CloudLayer from "./CloudLayer";
+import { GamestateContext } from "_Main";
+import { randUniform } from "_helpers";
 
-interface GalaxyMeshProps {
-  diameter: number;
-}
+const GalaxyMesh: FunctionComponent<{}> = (): JSX.Element => {
+  const _GAME = useContext(GamestateContext);
+  const diameter = _GAME.GALAXY.genParams.radius * 2;
 
-const GalaxyMesh: FunctionComponent<GalaxyMeshProps> = (props): JSX.Element => {
   const cmaps = useTexture({
-    disk0: "assets/galaxy/color-disk0.png",
-    disk1: "assets/galaxy/color-disk1.png",
-    disk2: "assets/galaxy/color-disk2.png",
+    disk: "assets/galaxy/color-disk.png",
+    ring: "assets/galaxy/color-ring.png",
+    spiral: "assets/galaxy/color-spiral.png",
   });
 
   const amaps = useTexture({
-    ring0: "assets/galaxy/alpha-ring0.png",
-    ring1: "assets/galaxy/alpha-ring1.png",
-    ring2: "assets/galaxy/alpha-ring2.png",
-
-    disk0: "assets/galaxy/alpha-disk0.png",
-
-    decal0: "assets/galaxy/alpha-decal0.png"
+    ring: "assets/galaxy/alpha-ring.png",
+    disk: "assets/galaxy/alpha-disk.png",
   });
 
   useEffect((): void => {
@@ -33,23 +29,39 @@ const GalaxyMesh: FunctionComponent<GalaxyMeshProps> = (props): JSX.Element => {
       tex.encoding = LinearEncoding;
     });
   }, []);
-  
 
   return (
-    <group rotation={[-Math.PI / 2, 0, 0]}>
-      <axesHelper args={[20]}/>
-      {/* Central annulus around the supermassive black hole */}
+    <group rotation={[-Math.PI / 2, 0, randUniform(0, 6.2831853)]} >
+      <axesHelper args={[20]} />
+      {/* Spiral arms */}
       <CloudLayer
-        scale={props.diameter * 0.7}
-        position={[-6, 6, 3]}
-        color={cmaps.disk1}
-        alpha={amaps.ring1}
+        scale={diameter * 1.5}
+        position={[0, 0, -5]}
+        color={cmaps.spiral}
+        alpha={amaps.ring}
       />
+      {/* Back fill  */}
       <CloudLayer
-        scale={props.diameter * 1.2}
-        position={[0, 0, -4]}
-        color={cmaps.disk2}
-        alpha={amaps.ring0}
+        scale={diameter * 1.1}
+        position={[0, 0, -16]}
+        color={cmaps.disk}
+        alpha={amaps.disk}
+      /> 
+      {/* Front fill */}
+      <group rotation={[0, 0, 1.2]}>
+        <CloudLayer
+          scale={diameter * 0.6}
+          position={[0, 0, 12]}
+          color={cmaps.disk}
+          alpha={amaps.disk}
+        /> 
+      </group>
+      {/* Dense clouds */}
+      <CloudLayer
+        scale={diameter}
+        position={[0, 0, 5]}
+        color={cmaps.ring}
+        alpha={amaps.disk}
       />
     </group>
   );

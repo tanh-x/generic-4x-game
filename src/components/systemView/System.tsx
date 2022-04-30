@@ -10,9 +10,10 @@ import { useThree, useFrame } from "@react-three/fiber";
 import { Line, OrbitControls, TrackballControls } from "@react-three/drei";
 import { useSpring, animated } from "@react-spring/three";
 import { Color } from "three";
+
+import Planet from "./Planet";
 import { GamestateContext } from "_Main";
 import { Array3, addArrays, randChoose } from "_helpers";
-import Planet from "./Planet";
 import { keplerianOrbit } from "scripts/keplerianOrbit";
 
 interface SystemProps {
@@ -127,31 +128,6 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
 
   return (
     <>
-      <OrbitControls
-        ref={controlsRef}
-        enabled={false}
-        // enableRotate={false}
-        enablePan={false}
-        enableZoom={false}
-        target={system.position}
-        rotateSpeed={0.5}
-        maxPolarAngle={Math.PI / 3}
-        minDistance={3}
-        dampingFactor={0.14}
-        autoRotate
-        autoRotateSpeed={0.4}
-        // maxDistance={30}
-      />
-      <TrackballControls
-        ref={ballControlsRef}
-        // enabled={false}
-        noRotate={true}
-        noPan={true}
-        noZoom={false}
-        zoomSpeed={0.8}
-        dynamicDampingFactor={0.15}
-      />
-
       {/* Similar to the star on the galaxy view, but higher quality */}
       <animated.mesh position={system.position} scale={scaleSpring.starScale}>
         <icosahedronBufferGeometry args={[system.star.radius, 10]} />
@@ -190,6 +166,30 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
           </Fragment>
         ))}
       </animated.group>
+      <OrbitControls
+        ref={controlsRef}
+        enabled={false}
+        // enableRotate={false}
+        enablePan={false}
+        enableZoom={false}
+        target={system.position}
+        rotateSpeed={0.5}
+        maxPolarAngle={Math.PI / 3}
+        minDistance={3}
+        dampingFactor={0.14}
+        autoRotate
+        autoRotateSpeed={0.4}
+        // maxDistance={30}
+      />
+      <TrackballControls
+        ref={ballControlsRef}
+        // enabled={false}
+        noRotate={true}
+        noPan={true}
+        noZoom={false}
+        zoomSpeed={0.8}
+        dynamicDampingFactor={0.15}
+      />
     </>
   );
 };
