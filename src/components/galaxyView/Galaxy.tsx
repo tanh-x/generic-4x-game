@@ -172,9 +172,9 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         minDistance={20}
         zoomSpeed={2}
         maxDistance={_GAME.GALAXY.genParams.radius * 2.5}
-        maxPolarAngle={50 * deg}
-        minAzimuthAngle={-30 * deg}
-        maxAzimuthAngle={30 * deg}
+        // maxPolarAngle={50 * deg}
+        // minAzimuthAngle={-30 * deg}
+        // maxAzimuthAngle={30 * deg}
       />
       <TrackballControls
         ref={ballControlsRef}

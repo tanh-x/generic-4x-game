@@ -173,7 +173,7 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
         <animated.gridHelper
           position={scaleSpring.gridPosition}
           ref={gridRef}
-          args={[50, 40, "#1c1c1f", "#071520"]}
+          args={[50, 40, "#2c2c2f", "#212a3f"]}
         />
         {/* <axesHelper args={[10]} /> */}
         {system.planets.map((planet, index) => (
@@ -182,10 +182,10 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
             <Line
               points={planet.misc.orbitPoints}
               alphaWrite
-              // color="#54616a"
-              color="#6a6458"
+              color="#84919a"
+              // color={system.star.color}
               vertexColors={orbitTrails as Color[] & true}
-              linewidth={0.4}
+              linewidth={0.7}
             />
           </Fragment>
         ))}

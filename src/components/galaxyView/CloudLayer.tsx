@@ -2,20 +2,21 @@ import { useRef, FunctionComponent } from "react";
 
 interface CloudLayerProps {
   scale: number
-  depth: number,
+  position: [number, number, number],
   color: THREE.Texture,
   alpha: THREE.Texture,
 }
 
 const CloudLayer: FunctionComponent<CloudLayerProps> = (props): JSX.Element => {
   return <mesh
-    position={[0, 0, props.depth]} // The group has been rotated so z becomes global y
+    position={props.position} // The group has been rotated so z becomes global y
     scale={props.scale}
     // visible={false}
   >
     <planeBufferGeometry />
     <meshBasicMaterial
       transparent
+      depthWrite={false}
       map={props.color}
       alphaMap={props.alpha}
     />

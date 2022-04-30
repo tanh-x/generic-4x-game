@@ -123,7 +123,7 @@ SYSTEMS.push({
     luminosity: 0,
   },
   planets: [],
-  position: [0, 2, 0],
+  position: [0, 5, 0],
   sector: 0,
 });
 // Place special systems
@@ -183,7 +183,7 @@ for (let i = SYSTEMS.length; i < params.starCount; i++) {
     }
   }
   // Add random y-coord variation
-  position[1] = randNormal(5, 3.4, 5);
+  position[1] = randNormal(0, 3.4, 5);
 
   const planets = generatePlanetarySystem(
     star.luminosity,
