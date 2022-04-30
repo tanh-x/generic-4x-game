@@ -21,21 +21,23 @@ import Galaxy from "components/galaxyView/Galaxy";
 import System from "components/systemView/System";
 import EnvFX from "components/EnvFX";
 import GalaxyMesh from "components/galaxyView/GalaxyMesh";
-import { GamestateProps } from "scripts/gamestateType";
+import { GamestateProps, GalaxyProps } from "scripts/gamestateType";
 import * as GalaxyGeneration from "scripts/galaxyGeneration";
 
 const _GAME: GamestateProps = {
-  GALAXY: {
-    genParams: GalaxyGeneration.params,
-    systems: GalaxyGeneration.SYSTEMS,
-    adjList: GalaxyGeneration.systemsAdjList,
-    edgeList: GalaxyGeneration.systemsEdgeList,
-  },
   PLAYERS: [],
   TEAMS: [],
   turn: 0,
 };
 export const GamestateContext = createContext(_GAME);
+
+const _GALAXY: GalaxyProps = {
+  genParams: GalaxyGeneration.params,
+  systems: GalaxyGeneration.SYSTEMS,
+  adjList: GalaxyGeneration.systemsAdjList,
+  edgeList: GalaxyGeneration.systemsEdgeList,
+}
+export const GalaxyContext = createContext(_GALAXY);
 
 const Main: FunctionComponent<{}> = (): JSX.Element => {
   // console.log("RENDER main");
@@ -74,25 +76,27 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
   return (
     <>
       <GamestateContext.Provider value={_GAME}>
-        {
+        <GalaxyContext.Provider value={_GALAXY}>
           {
-            galaxy: (
-              <Galaxy
-                switchView={switchView}
-                focusedIndexRef={focusedIndexRef}
-              />
-            ),
-            system: (
-              <System
-                switchView={switchView}
-                focusedIndexRef={focusedIndexRef}
-              />
-            ),
-          }[viewportState]
-        }
-        <animated.group ref={galaxyMeshRef} position={galaxyTransSpring.position}>
-          <GalaxyMesh />
-        </animated.group>
+            {
+              galaxy: (
+                <Galaxy
+                  switchView={switchView}
+                  focusedIndexRef={focusedIndexRef}
+                />
+              ),
+              system: (
+                <System
+                  switchView={switchView}
+                  focusedIndexRef={focusedIndexRef}
+                />
+              ),
+            }[viewportState]
+          }
+          <animated.group ref={galaxyMeshRef} position={galaxyTransSpring.position}>
+            <GalaxyMesh />
+          </animated.group>
+        </GalaxyContext.Provider>
       </GamestateContext.Provider>
       {/* <axesHelper position={[0, 0.001, 0]} args={[5]} /> */}
       {/* <gridHelper args={[200, 20]}/> */}

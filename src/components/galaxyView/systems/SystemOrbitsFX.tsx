@@ -3,7 +3,7 @@ import { Instances, Instance } from "@react-three/drei";
 import { Euler, Color } from "three";
 
 import { StarSystem } from "scripts/galaxyGeneration";
-import { GamestateContext } from "_Main";
+import { GalaxyContext } from "_Main";
 
 const rotatePlaneFaceUp = new Euler(-Math.PI / 2, 0, 0);
 
@@ -15,7 +15,7 @@ interface SystemOrbitsFXProps {
 }
 
 const SystemOrbitsFX: FunctionComponent<SystemOrbitsFXProps> = (props): JSX.Element => {
-  const _GAME = useContext(GamestateContext);
+  const _GALAXY = useContext(GalaxyContext);
   const fxCirclesRef = useRef<any>();
 
   useEffect((): void => {
@@ -27,11 +27,11 @@ const SystemOrbitsFX: FunctionComponent<SystemOrbitsFXProps> = (props): JSX.Elem
   return (<Instances
     name="outer circle fx instances"
     ref={fxCirclesRef}
-    limit={_GAME.GALAXY.genParams.starCount}
+    limit={_GALAXY.genParams.starCount}
   >
     <ringBufferGeometry args={[props.innerRadius, props.outerRadius, props.segments ?? 24]} />
     <meshBasicMaterial />
-    {_GAME.GALAXY.systems.map(
+    {_GALAXY.systems.map(
       (system: StarSystem, index: number): JSX.Element => {
         return (
           <Instance

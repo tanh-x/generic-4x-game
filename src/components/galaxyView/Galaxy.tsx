@@ -13,7 +13,7 @@ import { MapControls, TrackballControls } from "@react-three/drei";
 import { useSpring, animated } from "@react-spring/three";
 
 import { Array3, addArrays } from "_helpers";
-import { GamestateContext } from "_Main";
+import { GalaxyContext } from "_Main";
 
 import Stars from "./systems/Stars";
 import Paths from "./systems/Paths";
@@ -30,7 +30,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
   // console.log("RENDER galaxyView");
 
   const { gl, raycaster, scene, mouse, camera } = useThree();
-  const _GAME = useContext(GamestateContext);
+  const _GALAXY = useContext(GalaxyContext);
   const controlsRef = useRef<any>();
   const ballControlsRef = useRef<any>();
   const controlsUpdateFn = useRef((): void => {});
@@ -91,7 +91,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
       props.focusedIndexRef.current = undefined;
       return;
     }
-    console.log(_GAME.GALAXY.systems[selectedIndex]);
+    console.log(_GALAXY.systems[selectedIndex]);
 
     if (props.focusedIndexRef.current === selectedIndex) {
       props.switchView("system");
@@ -104,7 +104,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
 
   const focusOnSystem = (index: number): void => {
     props.focusedIndexRef.current = index;
-    const focusedSystemPosition = _GAME.GALAXY.systems[index].position;
+    const focusedSystemPosition = _GALAXY.systems[index].position;
     spring.position.start({
       from: camera.position.toArray(),
       to: addArrays(
@@ -131,7 +131,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
     } else {
       // Should be on switching from another view
       const focusedPosition =
-        _GAME.GALAXY.systems[props.focusedIndexRef.current].position;
+        _GALAXY.systems[props.focusedIndexRef.current].position;
       controlsRef.current.target.set(...focusedPosition);
       ballControlsRef.current.target.set(...focusedPosition);
       camera.lookAt(...focusedPosition);
@@ -157,7 +157,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         controlsRef={controlsRef}
         focusOnSystem={focusOnSystem}
       />
-      <Paths systems={_GAME.GALAXY.systems} edgeList={_GAME.GALAXY.edgeList} />
+      <Paths systems={_GALAXY.systems} edgeList={_GALAXY.edgeList} />
 
       <MapControls
         ref={controlsRef}
@@ -168,7 +168,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         panSpeed={0.8}
         minDistance={20}
         zoomSpeed={2}
-        maxDistance={_GAME.GALAXY.genParams.radius * 2.5}
+        maxDistance={_GALAXY.genParams.radius * 2.5}
         maxPolarAngle={50 * deg}
         minAzimuthAngle={-30 * deg}
         maxAzimuthAngle={30 * deg}

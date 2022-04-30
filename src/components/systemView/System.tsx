@@ -12,7 +12,7 @@ import { useSpring, animated } from "@react-spring/three";
 import { Color } from "three";
 
 import Planet from "./Planet";
-import { GamestateContext } from "_Main";
+import { GalaxyContext } from "_Main";
 import { Array3, addArrays, randChoose } from "_helpers";
 import { keplerianOrbit } from "scripts/keplerianOrbit";
 
@@ -24,11 +24,11 @@ interface SystemProps {
 const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
   console.log("RENDER systemView");
   const { camera } = useThree();
-  const _GAME = useContext(GamestateContext);
+  const _GALAXY = useContext(GalaxyContext);
   const controlsRef = useRef<any>();
   const ballControlsRef = useRef<any>();
   const gridRef = useRef<any>();
-  const system = _GAME.GALAXY.systems[props.focusedIndexRef.current!];
+  const system = _GALAXY.systems[props.focusedIndexRef.current!];
   const orbitTrails =
     system.planets.length !== 0
       ? system.planets[0].misc.orbitPoints.map(

@@ -21,7 +21,6 @@ export interface TeamProps {
 }
 
 export interface GamestateProps {
-  GALAXY: GalaxyProps;
   PLAYERS: PlayerProps[];
   TEAMS: TeamProps[];
   turn: number;

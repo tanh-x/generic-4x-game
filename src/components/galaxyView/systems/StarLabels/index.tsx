@@ -10,7 +10,7 @@ import {
 import { useThree, useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 
-import { GamestateContext } from "_Main";
+import { GalaxyContext } from "_Main";
 import { randChoose } from "_helpers";
 import { StarSystem } from "scripts/galaxyGeneration";
 
@@ -20,7 +20,7 @@ interface StarLabelsProps {
 }
 
 const StarLabels: FunctionComponent<StarLabelsProps> = (props): JSX.Element => {
-  const _GAME = useContext(GamestateContext);
+  const _GALAXY = useContext(GalaxyContext);
   const { camera } = useThree();
   const [zoomLevel, setZoomLevel] = useState<number>(2);
 
@@ -39,7 +39,7 @@ const StarLabels: FunctionComponent<StarLabelsProps> = (props): JSX.Element => {
 
   return (
     <group name="system labels" ref={props.labelsRef}>
-      {_GAME.GALAXY.systems.map((system: StarSystem, index: number) => {
+      {_GALAXY.systems.map((system: StarSystem, index: number) => {
         return (
           <Fragment key={index}>
             <Html

@@ -3,12 +3,12 @@ import { useTexture } from "@react-three/drei";
 import { sRGBEncoding, LinearEncoding } from "three";
 
 import CloudLayer from "./CloudLayer";
-import { GamestateContext } from "_Main";
+import { GalaxyContext } from "_Main";
 import { randUniform } from "_helpers";
 
 const GalaxyMesh: FunctionComponent<{}> = (): JSX.Element => {
-  const _GAME = useContext(GamestateContext);
-  const diameter = _GAME.GALAXY.genParams.radius * 2;
+  const _GALAXY = useContext(GalaxyContext);
+  const diameter = _GALAXY.genParams.radius * 2;
 
   const cmaps = useTexture({
     disk: "assets/galaxy/color-disk.jpg",

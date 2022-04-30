@@ -9,7 +9,7 @@ import { Euler, Color } from "three";
 import { useThree, useFrame } from "@react-three/fiber";
 import { Instance, Instances, useTexture } from "@react-three/drei";
 
-import { GamestateContext } from "_Main";
+import { GalaxyContext } from "_Main";
 import StarMesh from "components/galaxyView/systems/StarMesh";
 import SystemOrbitsFX from "./SystemOrbitsFX";
 import StarLabels from "./StarLabels";
@@ -23,7 +23,7 @@ interface StarsProps {
 const rotatePlaneFaceUp = new Euler(-Math.PI / 2, 0, 0);
 
 const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
-  const _GAME = useContext(GamestateContext);
+  const _GALAXY = useContext(GalaxyContext);
   const { camera, scene } = useThree();
   const starInstancesRef = useRef<any>();
   const labelsRef = useRef<any>();
@@ -50,11 +50,11 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
       <Instances
         name="star systems instances"
         ref={starInstancesRef}
-        limit={_GAME.GALAXY.genParams.starCount}
+        limit={_GALAXY.genParams.starCount}
       >
         <icosahedronBufferGeometry args={[1, 3]} />
         <meshBasicMaterial />
-        {_GAME.GALAXY.systems.map(
+        {_GALAXY.systems.map(
           (system: StarSystem, index: number): JSX.Element => {
             return (
               <Fragment key={index}>
@@ -79,12 +79,12 @@ const Stars: FunctionComponent<StarsProps> = (props): JSX.Element => {
       <Instances
         name="raycast hitboxes instances"
         ref={props.hitboxesRef}
-        limit={_GAME.GALAXY.genParams.starCount}
+        limit={_GALAXY.genParams.starCount}
         visible={false}
       >
         <boxBufferGeometry args={[7.5, 7.5, 5]} />
         <meshBasicMaterial wireframe={true} />
-        {_GAME.GALAXY.systems.map((system: StarSystem, index: number) => {
+        {_GALAXY.systems.map((system: StarSystem, index: number) => {
           return (
             <Instance
               key={index}
