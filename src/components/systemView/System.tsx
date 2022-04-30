@@ -97,7 +97,7 @@ const System: FunctionComponent<SystemProps> = (props): JSX.Element => {
     setTimeout(() => {
       camera.position.set(...initialCameraPosition);
       props.switchView("galaxy");
-    }, 500);
+    }, 200);
     // camera.position.set(...initialCameraPosition);
     // props.switchView("galaxy");
   };

@@ -30,7 +30,7 @@ const StarLabels: FunctionComponent<StarLabelsProps> = (props): JSX.Element => {
     const newZoomLevel = ~~(
       (camera.position.clone().sub(props.controlsRef.current.target).length() -
         30) /
-      130
+      140
     );
     if (newZoomLevel !== zoomLevel) {
       setZoomLevel(newZoomLevel);

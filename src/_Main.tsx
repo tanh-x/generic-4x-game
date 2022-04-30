@@ -45,15 +45,30 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
   const [enablePP, setEnablePP] = useState(true);
   const [viewportState, setViewportState] = useState<ViewportType>("galaxy");
   const focusedIndexRef = useRef<number | undefined>(undefined);
+  const galaxyMeshRef = useRef<THREE.Group>();
 
   const [galaxyTransSpring, galaxyTransSpringAPI] = useSpring(() => {
-    
+    return {
+      from: {
+        position: [0, 0, 0] as [number, number, number],
+      },
+      onStart: (): void => {
+        galaxyMeshRef.current!.visible = true;
+      },
+      onRest: (): void => {
+        galaxyMeshRef.current!.visible = (viewportState === "galaxy"); // toggle
+      },
+      config: {
+        tension: 140
+      }
+    }
   });
 
   const switchView = (newViewport: ViewportType): void => {
     if (newViewport === undefined) return;
     console.log("------- SWITCHING VIEWPORTS -------");
     setViewportState(newViewport);
+    galaxyTransSpringAPI.start({ position: newViewport === "galaxy" ? [0, 0, 0] : [0, 100, 0] });
   };
 
   return (
@@ -75,7 +90,7 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
             ),
           }[viewportState]
         }
-        <animated.group>
+        <animated.group ref={galaxyMeshRef} position={galaxyTransSpring.position}>
           <GalaxyMesh />
         </animated.group>
       </GamestateContext.Provider>

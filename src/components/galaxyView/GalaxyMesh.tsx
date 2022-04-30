@@ -11,14 +11,14 @@ const GalaxyMesh: FunctionComponent<{}> = (): JSX.Element => {
   const diameter = _GAME.GALAXY.genParams.radius * 2;
 
   const cmaps = useTexture({
-    disk: "assets/galaxy/color-disk.png",
-    ring: "assets/galaxy/color-ring.png",
-    spiral: "assets/galaxy/color-spiral.png",
+    disk: "assets/galaxy/color-disk.jpg",
+    ring: "assets/galaxy/color-ring.jpg",
+    spiral: "assets/galaxy/color-spiral.jpg",
   });
 
   const amaps = useTexture({
-    ring: "assets/galaxy/alpha-ring.png",
-    disk: "assets/galaxy/alpha-disk.png",
+    ring: "assets/galaxy/alpha-ring.jpg",
+    disk: "assets/galaxy/alpha-disk.jpg",
   });
 
   useEffect((): void => {
@@ -31,8 +31,7 @@ const GalaxyMesh: FunctionComponent<{}> = (): JSX.Element => {
   }, []);
 
   return (
-    <group rotation={[-Math.PI / 2, 0, randUniform(0, 6.2831853)]} >
-      <axesHelper args={[20]} />
+    <group rotation={[-Math.PI / 2, 0, randUniform(0, 6.283)]} >
       {/* Spiral arms */}
       <CloudLayer
         scale={diameter * 1.5}
