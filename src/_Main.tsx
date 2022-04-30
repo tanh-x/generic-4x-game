@@ -68,7 +68,7 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
     if (newViewport === undefined) return;
     console.log("------- SWITCHING VIEWPORTS -------");
     setViewportState(newViewport);
-    galaxyTransSpringAPI.start({ position: newViewport === "galaxy" ? [0, 0, 0] : [0, 100, 0] });
+    galaxyTransSpringAPI.start({ position: newViewport === "galaxy" ? [0, 0, 0] : [0, 50, 0] });
   };
 
   return (

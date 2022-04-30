@@ -31,13 +31,15 @@ const GalaxyMesh: FunctionComponent<{}> = (): JSX.Element => {
   }, []);
 
   return (
-    <group rotation={[-Math.PI / 2, 0, randUniform(0, 6.283)]} >
+    <group rotation={[-Math.PI / 2, 0, 0]} >
       {/* Spiral arms */}
       <CloudLayer
         scale={diameter * 1.5}
         position={[0, 0, -5]}
         color={cmaps.spiral}
         alpha={amaps.ring}
+        rotate
+        rotateSpeed={0.2}
       />
       {/* Back fill  */}
       <CloudLayer
@@ -45,22 +47,26 @@ const GalaxyMesh: FunctionComponent<{}> = (): JSX.Element => {
         position={[0, 0, -16]}
         color={cmaps.disk}
         alpha={amaps.disk}
+        rotate
+        rotateSpeed={0.7}
       /> 
       {/* Front fill */}
-      <group rotation={[0, 0, 1.2]}>
-        <CloudLayer
-          scale={diameter * 0.6}
-          position={[0, 0, 12]}
-          color={cmaps.disk}
-          alpha={amaps.disk}
-        /> 
-      </group>
+      <CloudLayer
+        scale={diameter * 0.6}
+        position={[0, 0, 12]}
+        color={cmaps.disk}
+        alpha={amaps.disk}
+        rotate
+        rotateSpeed={2.1}
+      /> 
       {/* Dense clouds */}
       <CloudLayer
         scale={diameter}
         position={[0, 0, 5]}
         color={cmaps.ring}
         alpha={amaps.disk}
+        rotate
+        rotateSpeed={-1}
       />
     </group>
   );
