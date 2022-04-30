@@ -10,7 +10,7 @@ import {
 import { useThree, useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 
-import { GalaxyContext } from "_Main";
+import { GalaxyContext } from "App";
 import { randChoose } from "_helpers";
 import { StarSystem } from "scripts/galaxyGeneration";
 
@@ -44,8 +44,8 @@ const StarLabels: FunctionComponent<StarLabelsProps> = (props): JSX.Element => {
           <Fragment key={index}>
             <Html
               position={system.position}
-              // as="Fragment"
               prepend
+              zIndexRange={[20, 10]}
               matrixAutoUpdate={false}
               style={{
                 pointerEvents: "none",

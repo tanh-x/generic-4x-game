@@ -22,14 +22,30 @@ Canvas {
   pointer-events: auto;
 }
 
+.app-wrapper {
+  pointer-events: none;
+  user-select: none;
+}
+
 .overlay-upper-left {
   position: absolute;
   top: 0;
   left: 0;
+  border: 1px solid #666;
 }
 
 .overlay-upper-right {
   position: absolute;
   top: 0;
   right: 0;
+  border: 1px solid #666;
+  display: inline-block;
+}
+
+.overlay-lower-left {
+  font-size: 12px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border: 1px solid #666;
 }

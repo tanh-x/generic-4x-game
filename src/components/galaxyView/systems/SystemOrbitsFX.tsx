@@ -3,7 +3,7 @@ import { Instances, Instance } from "@react-three/drei";
 import { Euler, Color } from "three";
 
 import { StarSystem } from "scripts/galaxyGeneration";
-import { GalaxyContext } from "_Main";
+import { GalaxyContext } from "App";
 
 const rotatePlaneFaceUp = new Euler(-Math.PI / 2, 0, 0);
 

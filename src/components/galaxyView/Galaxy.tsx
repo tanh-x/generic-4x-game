@@ -13,7 +13,7 @@ import { MapControls, TrackballControls } from "@react-three/drei";
 import { useSpring, animated } from "@react-spring/three";
 
 import { Array3, addArrays } from "_helpers";
-import { GalaxyContext } from "_Main";
+import { GalaxyContext } from "App";
 
 import Stars from "./systems/Stars";
 import Paths from "./systems/Paths";

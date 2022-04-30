@@ -3,7 +3,7 @@ import { useTexture } from "@react-three/drei";
 import { sRGBEncoding, LinearEncoding } from "three";
 
 import CloudLayer from "./CloudLayer";
-import { GalaxyContext } from "_Main";
+import { GalaxyContext } from "App";
 import { randUniform } from "_helpers";
 
 const GalaxyMesh: FunctionComponent<{}> = (): JSX.Element => {
@@ -39,11 +39,11 @@ const GalaxyMesh: FunctionComponent<{}> = (): JSX.Element => {
         color={cmaps.spiral}
         alpha={amaps.ring}
         rotate
-        rotateSpeed={0.2}
+        rotateSpeed={0.4}
       />
       {/* Back fill  */}
       <CloudLayer
-        scale={diameter * 1.1}
+        scale={diameter * 1.2}
         position={[0, 0, -16]}
         color={cmaps.disk}
         alpha={amaps.disk}
@@ -57,7 +57,7 @@ const GalaxyMesh: FunctionComponent<{}> = (): JSX.Element => {
         color={cmaps.disk}
         alpha={amaps.disk}
         rotate
-        rotateSpeed={2.1}
+        rotateSpeed={1.6}
       /> 
       {/* Dense clouds */}
       <CloudLayer

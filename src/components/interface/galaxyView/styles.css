@@ -1,0 +1,4 @@
+.status-box{
+  @apply m-2 p-20 backdrop-blur-md;
+  border: 1px solid #fff;
+}

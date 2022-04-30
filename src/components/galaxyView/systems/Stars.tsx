@@ -9,7 +9,7 @@ import { Euler, Color } from "three";
 import { useThree, useFrame } from "@react-three/fiber";
 import { Instance, Instances, useTexture } from "@react-three/drei";
 
-import { GalaxyContext } from "_Main";
+import { GalaxyContext } from "App";
 import StarMesh from "components/galaxyView/systems/StarMesh";
 import SystemOrbitsFX from "./SystemOrbitsFX";
 import StarLabels from "./StarLabels";

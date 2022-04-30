@@ -12,7 +12,7 @@ import { useSpring, animated } from "@react-spring/three";
 import { Color } from "three";
 
 import Planet from "./Planet";
-import { GalaxyContext } from "_Main";
+import { GalaxyContext } from "App";
 import { Array3, addArrays, randChoose } from "_helpers";
 import { keplerianOrbit } from "scripts/keplerianOrbit";
 

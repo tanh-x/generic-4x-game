@@ -1,11 +1,31 @@
 import "./App.css";
-import { useState, FunctionComponent, Suspense } from "react";
+import { useState, FunctionComponent, Suspense, createContext } from "react";
 import { Canvas } from "@react-three/fiber";
 
 import { NoToneMapping } from "three";
 import Main from "_Main";
 import DebugInfo from "components/DebugInfo/DebugInfo";
 import DebugInfoUpdater from "components/DebugInfo/DebugInfoUpdater";
+
+import * as GalaxyUI from "components/interface/galaxyView";
+
+import { GamestateProps, GalaxyProps } from "scripts/gamestateType";
+import * as GalaxyGeneration from "scripts/galaxyGeneration";
+
+const _GAME: GamestateProps = {
+  PLAYERS: [],
+  TEAMS: [],
+  turn: 0,
+};
+export const GamestateContext = createContext(_GAME);
+
+const _GALAXY: GalaxyProps = {
+  genParams: GalaxyGeneration.params,
+  systems: GalaxyGeneration.SYSTEMS,
+  adjList: GalaxyGeneration.systemsAdjList,
+  edgeList: GalaxyGeneration.systemsEdgeList,
+};
+export const GalaxyContext = createContext(_GALAXY);
 
 interface DebugInfoInterface {
   fps: number;
@@ -31,20 +51,27 @@ const App: FunctionComponent<any> = () => {
   });
 
   return (
-    <div className="">
-      <Canvas
-        camera={{ fov: 50, near: 0.1, far: 1200 }}
-        // linear
-        gl={{ alpha: false, toneMapping: NoToneMapping }}
-      >
-        <Suspense fallback={null}>
-          <Main />
-        </Suspense>
-        <DebugInfoUpdater updateInfo={setInfo} />
-      </Canvas>
-      <div className="overlay-upper-left">
-        <DebugInfo info={info} />
-      </div>
+    <div className="app-wrapper">
+      <GamestateContext.Provider value={_GAME}>
+        <GalaxyContext.Provider value={_GALAXY}>
+          <Canvas
+            camera={{ fov: 50, near: 0.1, far: 1200 }}
+            // linear
+            gl={{ alpha: false, toneMapping: NoToneMapping }}
+          >
+            <Suspense fallback={null}>
+              <Main />
+            </Suspense>
+            <DebugInfoUpdater updateInfo={setInfo} />
+          </Canvas>
+          <div className="overlay-upper-left">
+            <GalaxyUI.Status />
+          </div>
+          <div className="overlay-lower-left">
+            <DebugInfo info={info} />
+          </div>
+        </GalaxyContext.Provider>
+      </GamestateContext.Provider>
     </div>
   );
 };
