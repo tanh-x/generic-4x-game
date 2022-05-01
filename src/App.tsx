@@ -54,16 +54,16 @@ const App: FunctionComponent<any> = () => {
     <div className="app-wrapper">
       <GamestateContext.Provider value={_GAME}>
         <GalaxyContext.Provider value={_GALAXY}>
-          <Canvas
-            camera={{ fov: 50, near: 0.1, far: 1200 }}
-            // linear
-            gl={{ alpha: false, toneMapping: NoToneMapping }}
-          >
-            <Suspense fallback={null}>
-              <Main />
-            </Suspense>
-            <DebugInfoUpdater updateInfo={setInfo} />
-          </Canvas>
+          <Suspense fallback={null}>
+            <Canvas
+              camera={{ fov: 50, near: 0.1, far: 1200 }}
+              // linear
+              gl={{ alpha: false, toneMapping: NoToneMapping }}
+            >
+                <Main />
+              <DebugInfoUpdater updateInfo={setInfo} />
+            </Canvas>
+          </Suspense>
           <div className="overlay-upper-left">
             <GalaxyUI.Status />
           </div>

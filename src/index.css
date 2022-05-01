@@ -29,21 +29,26 @@ Canvas {
 
 .overlay-upper-left {
   position: absolute;
+  margin: 0.5em;
+  z-index: 20;
   top: 0;
   left: 0;
   border: 1px solid #666;
+  transform: translate(3px, 3px);
 }
 
-.overlay-upper-right {
+/* .overlay-upper-right {
   position: absolute;
+  z-index: 50;
   top: 0;
   right: 0;
   border: 1px solid #666;
   display: inline-block;
-}
+} */
 
 .overlay-lower-left {
   font-size: 12px;
+  z-index: 20;
   position: absolute;
   bottom: 0;
   left: 0;

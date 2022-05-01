@@ -1,4 +1,6 @@
 .status-box{
-  @apply m-2 p-20 backdrop-blur-md;
-  border: 1px solid #fff;
+  backdrop-filter: blur(12px);
+  padding: 2em;
+  border: 1px solid #bba;
+  transform: translate(-3px, -3px);
 }

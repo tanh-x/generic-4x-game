@@ -53,7 +53,7 @@ const GalaxyMesh: FunctionComponent<{}> = (): JSX.Element => {
       {/* Front fill */}
       <CloudLayer
         scale={diameter * 0.6}
-        position={[0, 0, 12]}
+        position={[5, 0, 12]}
         color={cmaps.disk}
         alpha={amaps.disk}
         rotate

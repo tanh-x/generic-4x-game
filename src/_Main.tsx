@@ -71,7 +71,7 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
         }[viewportState]
       }
       <animated.group ref={galaxyMeshRef} position={galaxyTransSpring.position}>
-        {/* <GalaxyMesh /> */}
+        <GalaxyMesh />
       </animated.group>
 
       {/* <axesHelper position={[0, 0.001, 0]} args={[5]} /> */}

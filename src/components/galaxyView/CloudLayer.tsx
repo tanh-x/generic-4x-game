@@ -15,7 +15,7 @@ const CloudLayer: FunctionComponent<CloudLayerProps> = (props): JSX.Element => {
   const speed = useRef<number>();
 
   useEffect((): void => {
-    speed.current = -0.0001 * (props.rotateSpeed ?? 1)
+    speed.current = -0.00013 * (props.rotateSpeed ?? 1)
   }, []);
 
   useFrame((): void => {

@@ -44,9 +44,8 @@ const StarLabels: FunctionComponent<StarLabelsProps> = (props): JSX.Element => {
           <Fragment key={index}>
             <Html
               position={system.position}
-              prepend
-              zIndexRange={[20, 10]}
-              matrixAutoUpdate={false}
+              zIndexRange={[2, 1]}
+              // matrixAutoUpdate={false}
               style={{
                 pointerEvents: "none",
                 height: 0,

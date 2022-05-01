@@ -11,12 +11,12 @@
 }
 
 .name-box {
-  @apply h-8 text-lg text-center z-20 flex justify-center items-center;
+  @apply h-8 text-lg text-center flex justify-center items-center;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .planet-box {
-  @apply h-8 z-10;
+  @apply h-8;
   transition: all 0.25s;
 
   display: flex;
