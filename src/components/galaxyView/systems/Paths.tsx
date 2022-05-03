@@ -38,9 +38,9 @@ const Paths: FunctionComponent<EdgesProps> = (props): JSX.Element => {
                     positionA
                       .clone()
                       .lerp(positionB, 0.5)
-                      .distanceTo(new Vector3(100, 0, 100)) **
+                      .distanceTo(new Vector3(-100, 0, -100)) **
                       1.74,
-                  0.2,
+                  0.1,
                   2.0
                 )
               )}

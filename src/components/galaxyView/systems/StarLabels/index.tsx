@@ -45,7 +45,7 @@ const StarLabels: FunctionComponent<StarLabelsProps> = (props): JSX.Element => {
             <Html
               position={system.position}
               zIndexRange={[2, 1]}
-              // matrixAutoUpdate={false}
+              matrixAutoUpdate={false}
               style={{
                 pointerEvents: "none",
                 height: 0,

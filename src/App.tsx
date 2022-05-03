@@ -56,7 +56,7 @@ const App: FunctionComponent<any> = () => {
         <GalaxyContext.Provider value={_GALAXY}>
           <Suspense fallback={null}>
             <Canvas
-              camera={{ fov: 50, near: 0.1, far: 1200 }}
+              camera={{ fov: 50, near: 0.1, far: 1500 }}
               // linear
               gl={{ alpha: false, toneMapping: NoToneMapping }}
             >

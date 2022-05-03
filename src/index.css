@@ -28,11 +28,14 @@ Canvas {
 }
 
 .overlay-upper-left {
+  @apply w-96 h-64;
+
   position: absolute;
-  margin: 0.5em;
-  z-index: 20;
   top: 0;
   left: 0;
+  z-index: 20;
+
+  margin: 0.5em;
   border: 1px solid #666;
   transform: translate(3px, 3px);
 }
@@ -47,7 +50,7 @@ Canvas {
 } */
 
 .overlay-lower-left {
-  font-size: 12px;
+  font-size: 16px;
   z-index: 20;
   position: absolute;
   bottom: 0;

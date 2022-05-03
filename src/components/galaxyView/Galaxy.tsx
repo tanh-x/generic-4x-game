@@ -168,7 +168,7 @@ const Galaxy: FunctionComponent<GalaxyProps> = (props): JSX.Element => {
         panSpeed={0.8}
         minDistance={20}
         zoomSpeed={2}
-        maxDistance={_GALAXY.genParams.radius * 2.5}
+        maxDistance={_GALAXY.genParams.radius * 3}
         maxPolarAngle={50 * deg}
         minAzimuthAngle={-30 * deg}
         maxAzimuthAngle={30 * deg}

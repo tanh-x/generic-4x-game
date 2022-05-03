@@ -1,10 +1,15 @@
 import "./styles.css";
-import { FunctionComponent } from "react";
+import { useContext, FunctionComponent } from "react";
 
 const Status: FunctionComponent = (): JSX.Element => {
   return <div className="status-box">
+    <div className="navbar">
+      <div className="navbar-btn">
+        fdf
+      </div>
+    </div>
     <p className="">
-      i swear to god if you dont fuckin behave right fuckin now
+      test
     </p>
   </div>;
 }
